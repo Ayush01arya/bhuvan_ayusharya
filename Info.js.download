@@ -1,0 +1,63 @@
+var Info = (function() {
+
+	
+	function _(viewer)
+	{
+		this.viewer=viewer;
+		this.pinBuilder = new Cesium.PinBuilder();
+		this.handler=new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+		this.marker=null;
+		
+		this.handler.setInputAction(function (click) {
+
+				var ray = this.viewer.camera.getPickRay(click.position);
+				var position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+				if(Cesium.defined(position)) {
+					 
+					var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+					var height= cartographic.height.toFixed(2);
+					var longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(4);
+					var latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(4);
+					$("#lon").html(longitude +"&deg; ");
+					$("#lat").html(latitude+"&deg; ");
+					$("#alt").html(height+" &#x2133;");
+					this.addPin('i',position);
+				}
+				
+		}.bind(this),Cesium.ScreenSpaceEventType.LEFT_CLICK);
+		
+		
+		
+	
+	}
+
+	_.prototype.addPin=function(id, position) {
+			viewer.entities.remove(this.marker);
+			this.marker = viewer.entities.add({
+				position: position,
+				billboard: {
+					image: this.pinBuilder.fromText(id, Cesium.Color.SALMON, 48),
+					verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+					eyeOffset: new Cesium.Cartesian3(0, 0, -1000)
+				}
+			});
+	}
+	_.prototype.destroy=function()
+	{
+
+		this.handler = this.handler && this.handler.destroy();
+		$("#lon").html("N/A");
+		$("#lat").html("N/A");
+		$("#alt").html("N/A");
+		viewer.entities.remove(this.marker);
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	return _;
+})();

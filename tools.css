@@ -1,0 +1,61 @@
+/* CSS used here will be applied after bootstrap.css */
+
+#navtool td
+{
+ width:40px; 
+  
+}
+.icon-flipped {
+transform: scaleX(-1);
+-moz-transform: scaleX(-1);
+-webkit-transform: scaleX(-1);
+-ms-transform: scaleX(-1);
+}
+
+#infotool th 
+{
+	width : 50px; 
+}
+
+#addcontent_dialogue label
+{
+	color:black;
+}
+#addcontent_dialogue td
+{
+	font-family: verdana;
+	font-size: 8pt;
+	color:black;
+}
+
+#recordplay
+{
+	text-align:center;
+}
+
+
+#recordplay video 
+{
+   width:100%;
+   height:100%;
+   padding-top:1%;
+   padding-bottom:1%;
+
+}
+
+#recordplaywidget
+{
+	position:absolute;
+	bottom:0px;
+	left:30%;
+	padding:1em;
+	width:40%;
+	display:none;
+	
+}
+
+#recordplaywidget button
+{
+	width:30%;
+	
+}

@@ -1,0 +1,177 @@
+var MeasureDistance = (function() {
+
+
+	function _(viewer)
+	{
+		this.viewer=viewer;
+		viewer.scene.globe.depthTestAgainstTerrain = false;
+		this.handler=new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+		this.polyline_positions=[];
+		this.billboards = viewer.scene.primitives.add(new Cesium.BillboardCollection());
+		this.polyline_collection = viewer.scene.primitives.add(new Cesium.PolylineCollection());
+		this.labels = viewer.scene.primitives.add(new Cesium.LabelCollection());
+		this.geometry_drawn=false;
+		this.label_position = viewer.entities.add({
+						label : {
+							show : false,
+							showBackground : true,
+							font : '14px monospace',
+							fillColor : Cesium.Color.WHITE,
+							outlineColor : Cesium.Color.BLACK,
+							outlineWidth : 4,
+							 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+							horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+							verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+							pixelOffset : new Cesium.Cartesian2(5, 0)
+						}
+					});
+	
+		this.handler.setInputAction(function (click) {
+
+				if(this.geometry_drawn)
+				{
+					this.clear();
+					$( "#submit_distance" ).prop( "disabled", false );
+					$("#toal_distance").html("");
+					this.geometry_drawn=false;
+				}
+				var ray = this.viewer.camera.getPickRay(click.position);
+				var position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+		
+				this.polyline_positions.push(position);
+				this.billboards.add({
+					show : true,
+					position : position,
+					pixelOffset : new Cesium.Cartesian2(0.0, 0.0),
+					eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
+					horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
+					verticalOrigin : Cesium.VerticalOrigin.CENTER,
+					scale : 1.0,
+					image:"./img/dragIcon.png",
+					color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
+				});
+				if(this.polyline_positions.length>1)
+				{
+						this.polyline_collection.add({
+							positions : [this.polyline_positions[this.polyline_positions.length-1], this.polyline_positions[this.polyline_positions.length-2]],
+							material : Cesium.Material.fromType('Color', {
+								color : Cesium.Color.SPRINGGREEN
+							}),
+							width: 5
+						});
+						var distance=this.compute_distance([this.polyline_positions[this.polyline_positions.length-2], this.polyline_positions[this.polyline_positions.length-1]],false);
+						
+						var result=new Cesium.Cartesian3();
+						
+						Cesium.Cartesian3.add(this.polyline_positions[this.polyline_positions.length-2], this.polyline_positions[this.polyline_positions.length-1], result) ;
+						Cesium.Cartesian3.divideByScalar(result, 2, result);
+						var label_text;
+						if(distance > 1000)
+						{
+							label_text=(distance/1000).toFixed(3)+" Km";
+						}else
+						{
+							label_text=distance.toFixed(3)+" m";
+						}
+						this.labels.add({
+							position:result,
+							text: label_text,
+							 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+							horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+							verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+							font : '40px sans-serif',
+							scale : 0.5
+					});
+				}
+				
+		}.bind(this),Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+		
+		this.handler.setInputAction(function (movement) {
+			
+			var pickedObject = viewer.scene.pick(movement.endPosition);
+			if(Cesium.defined(pickedObject) && Cesium.defined(pickedObject.primitive) )
+			{
+				if(pickedObject.primitive instanceof Cesium.Billboard)
+				{
+					
+					 var cartesian=pickedObject.primitive.position;
+					if (cartesian) {
+						var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+						var longitudeString = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
+						var latitudeString = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
+						
+						this.label_position.position = cartesian;
+						this.label_position.label.show = true;
+						this.label_position.label.text ='Lon: ' + ('   ' + longitudeString).slice(-7) + '\u00B0' +'\nLat: ' + ('   ' + latitudeString).slice(-7) + '\u00B0';
+					} else {
+						this.label_position.label.show = false;
+					}
+				}else
+				{
+					this.label_position.label.show = false;
+				}
+			}else
+			{
+				this.label_position.label.show = false;
+			}
+			
+        
+
+		}.bind(this),Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+	}
+	_.prototype.compute_distance=function(positions,drawn)
+	{
+		this.geometry_drawn=drawn;
+		var viewer=this.viewer;
+		
+		var surfacePositions = Cesium.PolylinePipeline.generateArc({
+			positions: positions
+		});
+		var scratchCartesian3 = new Cesium.Cartesian3();
+		var surfacePositionsLength = surfacePositions.length;
+		var totalDistanceInMeters = 0;
+		for (var i = 3; i < surfacePositionsLength; i += 3) {
+			scratchCartesian3.x = surfacePositions[i] - surfacePositions[i - 3];
+			scratchCartesian3.y = surfacePositions[i + 1] - surfacePositions[i - 2];
+			scratchCartesian3.z = surfacePositions[i + 2] - surfacePositions[i - 1];
+			totalDistanceInMeters += Cesium.Cartesian3.magnitude(scratchCartesian3);
+		}
+		
+		
+		return totalDistanceInMeters;
+
+		
+		
+		
+	}
+	_.prototype.get_count=function()
+	{
+		return this.polyline_positions.length;
+	}
+	_.prototype.clear=function()
+	{
+		this.polyline_positions=[];
+		this.polyline_collection.removeAll();
+		this.billboards.removeAll();
+		this.labels.removeAll();
+	}
+	_.prototype.destroy=function()
+	{
+		viewer.scene.globe.depthTestAgainstTerrain = true;
+		this.handler = this.handler && this.handler.destroy();
+		this.polyline_positions=[];
+		this.polyline_collection.removeAll();
+		this.viewer.entities.remove(this.label_position);
+		this.billboards.removeAll();
+		this.labels.removeAll();
+	}
+
+	
+	
+	
+	
+	
+	
+	return _;
+})();

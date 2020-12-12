@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://bhuvan-app1.nrsc.gov.in/globe/3d.php -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">  <!-- Use Chrome Frame in IE -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+   
+    <title>Bhuvan 3D</title>
+	
+	<link rel="stylesheet" href="./Bhuvan4_files/style.css" type="text/css">
+	<link rel="stylesheet" href="./Bhuvan4_files/tools.css" type="text/css">
+	  <link rel="stylesheet" href="./Bhuvan4_files/normalize.min.css">
+	  
+
+  <link rel="stylesheet" href="./Bhuvan4_files/style_form.css">
+	
+
+  <script src="./Bhuvan4_files/Cesium.js.download"></script>
+   <script src="./Bhuvan4_files/geoserverTerrain.js.download"></script>
+  <script src="./Bhuvan4_files/EventHandler.js.download"></script>
+  <script src="./Bhuvan4_files/viewerCesiumNavigationMixin.js.download"></script><style type="text/css">.full-window{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;overflow:hidden;padding:0;-webkit-transition:left .25s ease-out;-moz-transition:left .25s ease-out;-ms-transition:left .25s ease-out;-o-transition:left .25s ease-out;transition:left .25s ease-out}.transparent-to-input{pointer-events:none}.opaque-to-input{pointer-events:auto}.clickable{cursor:pointer}.markdown a:hover,.markdown u,a:hover{text-decoration:underline}.modal,.modal-background{top:0;left:0;bottom:0;right:0}.modal-background{pointer-events:auto;background-color:rgba(0,0,0,.5);z-index:1000;position:fixed}.modal{position:absolute;margin:auto;background-color:#2f353c;max-height:100%;max-width:100%;font-family:'Roboto',sans-serif;color:#fff}.modal-header{background-color:rgba(0,0,0,.2);border-bottom:1px solid rgba(100,100,100,.6);font-size:15px;line-height:40px;margin:0}.modal-header h1{font-size:15px;color:#fff;margin-left:15px}.modal-content{margin-left:15px;margin-right:15px;margin-bottom:15px;padding-top:15px;overflow:auto}.modal-close-button{position:absolute;right:15px;cursor:pointer;font-size:18px;color:#fff}#ui{z-index:2100}@media print{.full-window{position:initial}}.markdown img{max-width:100%}.markdown svg{max-height:100%}.markdown fieldset,.markdown input,.markdown select,.markdown textarea{font-family:inherit;font-size:1rem;box-sizing:border-box;margin-top:0;margin-bottom:0}.markdown label{vertical-align:middle}.markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{font-family:inherit;font-weight:700;line-height:1.25;margin-top:1em;margin-bottom:.5em}.markdown h1{font-size:2rem}.markdown h2{font-size:1.5rem}.markdown h3{font-size:1.25rem}.markdown h4{font-size:1rem}.markdown h5{font-size:.875rem}.markdown h6{font-size:.75rem}.markdown dl,.markdown ol,.markdown p,.markdown ul{margin-top:0;margin-bottom:1rem}.markdown strong{font-weight:700}.markdown em{font-style:italic}.markdown small{font-size:80%}.markdown mark{color:#000;background:#ff0}.markdown s{text-decoration:line-through}.markdown ol{list-style:decimal inside}.markdown ul{list-style:disc inside}.markdown code,.markdown pre,.markdown samp{font-family:monospace;font-size:inherit}.markdown pre{margin-top:0;margin-bottom:1rem;overflow-x:scroll}.markdown a{color:#68adfe;text-decoration:none}.markdown code,.markdown pre{background-color:transparent;border-radius:3px}.markdown hr{border:0;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:rgba(0,0,0,.125)}.markdown .left-align{text-align:left}.markdown .center{text-align:center}.markdown .right-align{text-align:right}.markdown .justify{text-align:justify}.markdown .truncate{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.markdown ol.upper-roman{list-style-type:upper-roman}.markdown ol.lower-alpha{list-style-type:lower-alpha}.markdown ul.circle{list-style-type:circle}.markdown ul.square{list-style-type:square}.markdown .list-reset{list-style:none;padding-left:0}.floating,.floating-horizontal,.floating-vertical{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8)}.floating-horizontal{padding-left:5px;padding-right:5px}.floating-vertical{padding-top:5px;padding-bottom:5px}@media print{.floating{display:none}}.distance-legend{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8);padding-left:5px;padding-right:5px;right:25px;bottom:30px;height:30px;width:125px;border:1px solid rgba(255,255,255,.1);box-sizing:content-box}.distance-legend-label{display:inline-block;font-family:'Roboto',sans-serif;font-size:14px;font-weight:lighter;line-height:30px;color:#fff;width:125px;text-align:center}.distance-legend-scale-bar{border-left:1px solid #fff;border-right:1px solid #fff;border-bottom:1px solid #fff;position:absolute;height:10px;top:15px}@media print{.distance-legend{display:none}}@media screen and (max-width:700px),screen and (max-height:420px){.distance-legend{display:none}}.navigation-controls{position:absolute;right:30px;top:210px;width:30px;border:1px solid rgba(255,255,255,.1);font-weight:300;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.navigation-control{cursor:pointer;border-bottom:1px solid #555}.naviagation-control:active{color:#fff}.navigation-control-last{cursor:pointer;border-bottom:0}.navigation-control-icon-zoom-in{padding-bottom:4px}.navigation-control-icon-zoom-in,.navigation-control-icon-zoom-out{position:relative;text-align:center;font-size:20px;color:#fff}.navigation-control-icon-reset{position:relative;left:10px;width:10px;height:10px;fill:rgba(255,255,255,.8);padding-top:6px;padding-bottom:6px;box-sizing:content-box}.compass,.compass-outer-ring{position:absolute;width:95px;height:95px}.compass{pointer-events:auto;right:0;overflow:hidden;top:100px}.compass-outer-ring{top:0;fill:rgba(255,255,255,.5)}.compass-outer-ring-background{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:44px;border:12px solid rgba(47,53,60,.8);box-sizing:content-box}.compass-gyro{pointer-events:none;position:absolute;top:0;width:95px;height:95px;fill:#ccc}.compass-gyro-active,.compass-gyro-background:hover+.compass-gyro{fill:#68adfe}.compass-gyro-background{position:absolute;top:30px;left:30px;width:33px;height:33px;border-radius:33px;background-color:rgba(47,53,60,.8);border:1px solid rgba(255,255,255,.2);box-sizing:content-box}.compass-rotation-marker{position:absolute;top:0;width:95px;height:95px;fill:#68adfe}@media screen and (max-width:700px),screen and (max-height:420px){.compass,.navigation-controls{display:none}}@media print{.compass,.navigation-controls{display:none}}</style>
+  <script src="./Bhuvan4_files/DrawHelper.js.download"></script>
+  <script src="./Bhuvan4_files/MeasureArea.js.download"></script>
+  <script src="./Bhuvan4_files/MeasureDistance.js.download"></script>
+  
+  <script src="./Bhuvan4_files/Info.js.download"></script>
+   <script src="./Bhuvan4_files/recordandplay.js.download"></script>
+    <script src="./Bhuvan4_files/TerrainProfile.js.download"></script>
+  
+ 
+    <!--<script type="text/javascript" src="ThirdParty/requirejs-2.1.9/require.js"></script>
+    <script type="text/javascript">
+    require.config({
+        baseUrl : 'Source_120',
+        waitSeconds : 60
+    });
+    </script>-->
+<style></style></head>
+<body>
+
+
+  
+<script> var bhuvan_user_name;</script>
+ 
+
+<style>
+    @import url(css/bucket.css);
+  @import url(css/DrawHelper.css);
+
+		  .no-close .ui-dialog-titlebar-close {  
+		display: none;
+	}
+
+		iframe .cesium-infoBox-iframe
+		{
+			max-height: 800px;
+			
+		}
+		
+		#scrollable-dropdown-menu .tt-dropdown-menu {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+#bannerstrip td{
+	text-align:center;
+}
+
+#addlayers {
+    display: table;
+    border: 1px solid blue;
+
+}
+.line {
+    padding-right: 21px; /* 20+1 */
+    position: relative;
+}
+.line:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    border-right: 1px solid red;
+    top: 0px;
+    bottom: 0px;
+}
+.first {
+    display: table-cell;
+    width:200px;
+}
+.second {
+    display: table-cell;
+    width:300px;
+    padding-left: 10px;
+}
+</style>
+
+
+<div id="bhuvan_banner">
+<div id="banner" style="position: relative;">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" height="60px" style="background:white;">
+		<tbody><tr>
+			<td width="33%" height="60px" valign="top">
+				<a href="https://bhuvan.nrsc.gov.in/bhuvan/">
+					<img border="0" src="./Bhuvan4_files/bhuvan_viewer3t3.png" style="float:left; padding-left:5px;  vertical-align:middle">
+				</a>
+			</td>               
+			<td width="33%" height="50px" style="font-size:26px;color:#298A08;font-family:Calibri"><center><b>BHUVAN 3D</b><br> <b><span style="font-size:20px;color:#DF7401;font-family:Calibri"></span></b></center></td>
+			<td width="33%" height="60px" valign="top">
+				<div id="login" style="float:right;width:100%;">
+	
+					<div id="logindiv" style="float:right; padding-top:2px; vertical-align:middle; color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; font-size:11px"> 
+							<b>
+																
+									<a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Way to portal login" alt="login" id="alogin" class="btn btn-info btn-sm"> 
+									<span class="glyphicon glyphicon-log-in"></span> Log in</a> 
+									<a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Click here to logout" alt="logout" id="alogout" class="btn btn-info btn-sm" style="display:none;">
+									<span class="glyphicon glyphicon-log-out"></span> Log out</a> 
+															
+								 								 								
+							</b>
+					</div>
+		
+					<div id="loggedindiv" style="float:right; padding-top:9px; vertical-align:middle; font-family: Arial; font-size: 12px; color: darkblue">
+						<b>
+							
+													</b>
+					</div> 
+	
+				</div>
+				<img border="0" src="./Bhuvan4_files/bhuvan_viewer3t2.png" style="float:right; padding-right:5px; vertical-align:middle">
+			</td>               
+		</tr>
+	</tbody></table>
+			
+</div> 
+
+
+<div id="bannerstrip" bgcolor="#FFFFFF">
+		<table width="100%" border="1" style="border-color:white">
+			<tbody><tr bgcolor="#6495ED">
+				<td width="70%" height="22px">	
+					<div style="vertical-align:middle; width:300px; height:100%;font-color:white;"> 
+						<div id="titlediv" style="float:left;padding-top:4px;vertical-align:middle; width:80px; height:100%;font-family: Arial; font-size: 12px; color: white">
+							<b> Bhuvan 3D &nbsp;&nbsp; </b>
+						</div>	
+			
+						<div>
+																		
+							<input type="text" value="" id="searchval" style="color: Gray; font-size:12px;width:160px;">
+							
+							<img src="./Bhuvan4_files/searchnew.png" width="18" style="cursor:pointer" id="search_button" height="15" border="0">									
+						
+						</div>
+					</div>
+					<div id="live"></div>
+				</td>
+				
+				<td style="width:6%;">
+						
+							<ul id="toolsmenu" style="width:100%;text-align:center;">
+								<li style="cursor:pointer;color:white;width:100%; text-align:center;"><b> Tools</b>
+									<ul>
+										<li style="margin-top:3px;"><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Add Missing Places" style="cursor:pointer" id="addcontent">Add Content</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Screen Shot" style="cursor:pointer" id="snap">Snap Shot</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Record Play Download" id="record">Record and Play</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Add Layers" style="cursor:pointer" id="add_layer">Add Layer</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Draw Tool" id="draw">Draw Tool</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Area Measurement" id="area">Measure Area</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Distance Measurement" id="distance">Measure Distance</a></li>
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Terrain Profile" id="TP">Terrain Profile</a></li>													
+										
+										<li><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" title="Click to open info tool" id="info">Info</a></li>
+										
+									</ul>
+								</li>
+							</ul>
+									
+									
+						
+				</td>
+					
+		
+
+
+	<td><b><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" id="models" style="font-family: Arial; font-size: 12px; color: white">3D Models</a></b></td>
+	<td><b><a href="https://bhuvan-app1.nrsc.gov.in/globe/3d.php#" id="overlaylayer" style="font-family: Arial; font-size: 12px; color: white">Layers</a></b></td>
+	
+				
+					<td><b><a href="https://bhuvan.nrsc.gov.in/forum/" style="font-family: Arial; font-size: 12px; color: white" target="_blank">Forum</a></b></td>
+					<!--<td>&nbsp;|&nbsp;<b><a href="http://bhuvan3.nrsc.gov.in/bhuvan/help/bhuvan2d_help.html" target="_blank" title="Help" style="font-family: Arial; font-size: 12px; color: white">Help</a></b></td>-->	
+					<td><b><a href="https://bhuvan.nrsc.gov.in/" target="_blank" style="font-family: Arial; font-size: 12px; color: white">Home</a></b></td>
+			</tr>
+	</tbody></table>
+				
+</div>
+		
+</div>
+		
+
+<div id="cesiumContainer" class="fullSize"><div class="cesium-viewer"><div class="cesium-viewer-cesiumWidgetContainer"><div class="cesium-widget"><canvas width="1708" height="615" style="image-rendering: pixelated;"></canvas></div><div class="cesium-widget-cesiumNavigationContainer"><div id="distanceLegendDiv"><div class="compass" title="Drag outer ring: rotate view. Drag inner gyroscope: free orbit.Double-click: reset view.TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }"><div class="compass-outer-ring-background"></div> <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: &#39;rotate(-&#39; + orbitCursorAngle + &#39;rad)&#39;, &#39;-webkit-transform&#39;: &#39;rotate(-&#39; + orbitCursorAngle + &#39;rad)&#39;, opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }" style="display: none; transform: rotate(0rad); opacity: 0;"><svg:svg class="cesium-svgPath-svg" width="145" height="145" viewBox="0 0 145 145"><path d="M 72.46875,22.03125 C 59.505873,22.050338 46.521615,27.004287 36.6875,36.875 L 47.84375,47.96875 C 61.521556,34.240041 83.442603,34.227389 97.125,47.90625 l 11.125,-11.125 C 98.401629,26.935424 85.431627,22.012162 72.46875,22.03125 z"></path></svg:svg></div> <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: &#39;rotate(-&#39; + heading + &#39;rad)&#39;, &#39;-webkit-transform&#39;: &#39;rotate(-&#39; + heading + &#39;rad)&#39; }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }" style="transform: rotate(-6.28319rad);"><svg:svg class="cesium-svgPath-svg" width="145" height="145" viewBox="0 0 145 145"><path d="m 66.5625,0 0,15.15625 3.71875,0 0,-10.40625 5.5,10.40625 4.375,0 0,-15.15625 -3.71875,0 0,10.40625 L 70.9375,0 66.5625,0 z M 72.5,20.21875 c -28.867432,0 -52.28125,23.407738 -52.28125,52.28125 0,28.87351 23.413818,52.3125 52.28125,52.3125 28.86743,0 52.28125,-23.43899 52.28125,-52.3125 0,-28.873512 -23.41382,-52.28125 -52.28125,-52.28125 z m 0,1.75 c 13.842515,0 26.368948,5.558092 35.5,14.5625 l -11.03125,11 0.625,0.625 11.03125,-11 c 8.9199,9.108762 14.4375,21.579143 14.4375,35.34375 0,13.764606 -5.5176,26.22729 -14.4375,35.34375 l -11.03125,-11 -0.625,0.625 11.03125,11 c -9.130866,9.01087 -21.658601,14.59375 -35.5,14.59375 -13.801622,0 -26.321058,-5.53481 -35.4375,-14.5 l 11.125,-11.09375 c 6.277989,6.12179 14.857796,9.90625 24.3125,9.90625 19.241896,0 34.875,-15.629154 34.875,-34.875 0,-19.245847 -15.633104,-34.84375 -34.875,-34.84375 -9.454704,0 -18.034511,3.760884 -24.3125,9.875 L 37.0625,36.4375 C 46.179178,27.478444 58.696991,21.96875 72.5,21.96875 z m -0.875,0.84375 0,13.9375 1.75,0 0,-13.9375 -1.75,0 z M 36.46875,37.0625 47.5625,48.15625 C 41.429794,54.436565 37.65625,63.027539 37.65625,72.5 c 0,9.472461 3.773544,18.055746 9.90625,24.34375 L 36.46875,107.9375 c -8.96721,-9.1247 -14.5,-21.624886 -14.5,-35.4375 0,-13.812615 5.53279,-26.320526 14.5,-35.4375 z M 72.5,39.40625 c 18.297686,0 33.125,14.791695 33.125,33.09375 0,18.302054 -14.827314,33.125 -33.125,33.125 -18.297687,0 -33.09375,-14.822946 -33.09375,-33.125 0,-18.302056 14.796063,-33.09375 33.09375,-33.09375 z M 22.84375,71.625 l 0,1.75 13.96875,0 0,-1.75 -13.96875,0 z m 85.5625,0 0,1.75 14,0 0,-1.75 -14,0 z M 71.75,108.25 l 0,13.9375 1.71875,0 0,-13.9375 -1.71875,0 z"></path></svg:svg></div> <div class="compass-gyro-background"></div> <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { &#39;compass-gyro-active&#39;: isOrbiting }"><svg:svg class="cesium-svgPath-svg" width="145" height="145" viewBox="0 0 145 145"><path d="m 72.71875,54.375 c -0.476702,0 -0.908208,0.245402 -1.21875,0.5625 -0.310542,0.317098 -0.551189,0.701933 -0.78125,1.1875 -0.172018,0.363062 -0.319101,0.791709 -0.46875,1.25 -6.91615,1.075544 -12.313231,6.656514 -13,13.625 -0.327516,0.117495 -0.661877,0.244642 -0.9375,0.375 -0.485434,0.22959 -0.901634,0.471239 -1.21875,0.78125 -0.317116,0.310011 -0.5625,0.742111 -0.5625,1.21875 l 0.03125,0 c 0,0.476639 0.245384,0.877489 0.5625,1.1875 0.317116,0.310011 0.702066,0.58291 1.1875,0.8125 0.35554,0.168155 0.771616,0.32165 1.21875,0.46875 1.370803,6.10004 6.420817,10.834127 12.71875,11.8125 0.146999,0.447079 0.30025,0.863113 0.46875,1.21875 0.230061,0.485567 0.470708,0.870402 0.78125,1.1875 0.310542,0.317098 0.742048,0.5625 1.21875,0.5625 0.476702,0 0.876958,-0.245402 1.1875,-0.5625 0.310542,-0.317098 0.582439,-0.701933 0.8125,-1.1875 0.172018,-0.363062 0.319101,-0.791709 0.46875,-1.25 6.249045,-1.017063 11.256351,-5.7184 12.625,-11.78125 0.447134,-0.1471 0.86321,-0.300595 1.21875,-0.46875 0.485434,-0.22959 0.901633,-0.502489 1.21875,-0.8125 0.317117,-0.310011 0.5625,-0.710861 0.5625,-1.1875 l -0.03125,0 c 0,-0.476639 -0.245383,-0.908739 -0.5625,-1.21875 C 89.901633,71.846239 89.516684,71.60459 89.03125,71.375 88.755626,71.244642 88.456123,71.117495 88.125,71 87.439949,64.078341 82.072807,58.503735 75.21875,57.375 c -0.15044,-0.461669 -0.326927,-0.884711 -0.5,-1.25 -0.230061,-0.485567 -0.501958,-0.870402 -0.8125,-1.1875 -0.310542,-0.317098 -0.710798,-0.5625 -1.1875,-0.5625 z m -0.0625,1.40625 c 0.03595,-0.01283 0.05968,0 0.0625,0 0.0056,0 0.04321,-0.02233 0.1875,0.125 0.144288,0.147334 0.34336,0.447188 0.53125,0.84375 0.06385,0.134761 0.123901,0.309578 0.1875,0.46875 -0.320353,-0.01957 -0.643524,-0.0625 -0.96875,-0.0625 -0.289073,0 -0.558569,0.04702 -0.84375,0.0625 C 71.8761,57.059578 71.936151,56.884761 72,56.75 c 0.18789,-0.396562 0.355712,-0.696416 0.5,-0.84375 0.07214,-0.07367 0.120304,-0.112167 0.15625,-0.125 z m 0,2.40625 c 0.448007,0 0.906196,0.05436 1.34375,0.09375 0.177011,0.592256 0.347655,1.271044 0.5,2.03125 0.475097,2.370753 0.807525,5.463852 0.9375,8.9375 -0.906869,-0.02852 -1.834463,-0.0625 -2.78125,-0.0625 -0.92298,0 -1.802327,0.03537 -2.6875,0.0625 0.138529,-3.473648 0.493653,-6.566747 0.96875,-8.9375 0.154684,-0.771878 0.320019,-1.463985 0.5,-2.0625 0.405568,-0.03377 0.804291,-0.0625 1.21875,-0.0625 z m -2.71875,0.28125 c -0.129732,0.498888 -0.259782,0.987558 -0.375,1.5625 -0.498513,2.487595 -0.838088,5.693299 -0.96875,9.25 -3.21363,0.15162 -6.119596,0.480068 -8.40625,0.9375 -0.682394,0.136509 -1.275579,0.279657 -1.84375,0.4375 0.799068,-6.135482 5.504716,-11.036454 11.59375,-12.1875 z M 75.5,58.5 c 6.043169,1.18408 10.705093,6.052712 11.5,12.15625 -0.569435,-0.155806 -1.200273,-0.302525 -1.875,-0.4375 -2.262525,-0.452605 -5.108535,-0.783809 -8.28125,-0.9375 -0.130662,-3.556701 -0.470237,-6.762405 -0.96875,-9.25 C 75.761959,59.467174 75.626981,58.990925 75.5,58.5 z m -2.84375,12.09375 c 0.959338,0 1.895843,0.03282 2.8125,0.0625 C 75.48165,71.267751 75.5,71.871028 75.5,72.5 c 0,1.228616 -0.01449,2.438313 -0.0625,3.59375 -0.897358,0.0284 -1.811972,0.0625 -2.75,0.0625 -0.927373,0 -1.831062,-0.03473 -2.71875,-0.0625 -0.05109,-1.155437 -0.0625,-2.365134 -0.0625,-3.59375 0,-0.628972 0.01741,-1.232249 0.03125,-1.84375 0.895269,-0.02827 1.783025,-0.0625 2.71875,-0.0625 z M 68.5625,70.6875 c -0.01243,0.60601 -0.03125,1.189946 -0.03125,1.8125 0,1.22431 0.01541,2.407837 0.0625,3.5625 -3.125243,-0.150329 -5.92077,-0.471558 -8.09375,-0.90625 -0.784983,-0.157031 -1.511491,-0.316471 -2.125,-0.5 -0.107878,-0.704096 -0.1875,-1.422089 -0.1875,-2.15625 0,-0.115714 0.02849,-0.228688 0.03125,-0.34375 0.643106,-0.20284 1.389577,-0.390377 2.25,-0.5625 2.166953,-0.433487 4.97905,-0.75541 8.09375,-0.90625 z m 8.3125,0.03125 c 3.075121,0.15271 5.824455,0.446046 7.96875,0.875 0.857478,0.171534 1.630962,0.360416 2.28125,0.5625 0.0027,0.114659 0,0.228443 0,0.34375 0,0.735827 -0.07914,1.450633 -0.1875,2.15625 -0.598568,0.180148 -1.29077,0.34562 -2.0625,0.5 -2.158064,0.431708 -4.932088,0.754666 -8.03125,0.90625 0.04709,-1.154663 0.0625,-2.33819 0.0625,-3.5625 0,-0.611824 -0.01924,-1.185379 -0.03125,-1.78125 z M 57.15625,72.5625 c 0.0023,0.572772 0.06082,1.131112 0.125,1.6875 -0.125327,-0.05123 -0.266577,-0.10497 -0.375,-0.15625 -0.396499,-0.187528 -0.665288,-0.387337 -0.8125,-0.53125 -0.147212,-0.143913 -0.15625,-0.182756 -0.15625,-0.1875 0,-0.0047 -0.02221,-0.07484 0.125,-0.21875 0.147212,-0.143913 0.447251,-0.312472 0.84375,-0.5 0.07123,-0.03369 0.171867,-0.06006 0.25,-0.09375 z m 31.03125,0 c 0.08201,0.03503 0.175941,0.05872 0.25,0.09375 0.396499,0.187528 0.665288,0.356087 0.8125,0.5 0.14725,0.14391 0.15625,0.21405 0.15625,0.21875 0,0.0047 -0.009,0.04359 -0.15625,0.1875 -0.147212,0.143913 -0.416001,0.343722 -0.8125,0.53125 -0.09755,0.04613 -0.233314,0.07889 -0.34375,0.125 0.06214,-0.546289 0.09144,-1.094215 0.09375,-1.65625 z m -29.5,3.625 c 0.479308,0.123125 0.983064,0.234089 1.53125,0.34375 2.301781,0.460458 5.229421,0.787224 8.46875,0.9375 0.167006,2.84339 0.46081,5.433176 0.875,7.5 0.115218,0.574942 0.245268,1.063612 0.375,1.5625 -5.463677,-1.028179 -9.833074,-5.091831 -11.25,-10.34375 z m 27.96875,0 C 85.247546,81.408945 80.919274,85.442932 75.5,86.5 c 0.126981,-0.490925 0.261959,-0.967174 0.375,-1.53125 0.41419,-2.066824 0.707994,-4.65661 0.875,-7.5 3.204493,-0.15162 6.088346,-0.480068 8.375,-0.9375 0.548186,-0.109661 1.051942,-0.220625 1.53125,-0.34375 z M 70.0625,77.53125 c 0.865391,0.02589 1.723666,0.03125 2.625,0.03125 0.912062,0 1.782843,-0.0048 2.65625,-0.03125 -0.165173,2.736408 -0.453252,5.207651 -0.84375,7.15625 -0.152345,0.760206 -0.322989,1.438994 -0.5,2.03125 -0.437447,0.03919 -0.895856,0.0625 -1.34375,0.0625 -0.414943,0 -0.812719,-0.02881 -1.21875,-0.0625 -0.177011,-0.592256 -0.347655,-1.271044 -0.5,-2.03125 -0.390498,-1.948599 -0.700644,-4.419842 -0.875,-7.15625 z m 1.75,10.28125 c 0.284911,0.01545 0.554954,0.03125 0.84375,0.03125 0.325029,0 0.648588,-0.01171 0.96875,-0.03125 -0.05999,0.148763 -0.127309,0.31046 -0.1875,0.4375 -0.18789,0.396562 -0.386962,0.696416 -0.53125,0.84375 -0.144288,0.147334 -0.181857,0.125 -0.1875,0.125 -0.0056,0 -0.07446,0.02233 -0.21875,-0.125 C 72.355712,88.946416 72.18789,88.646562 72,88.25 71.939809,88.12296 71.872486,87.961263 71.8125,87.8125 z"></path></svg:svg></div></div><div class="navigation-controls"><!-- ko foreach: controls --><div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? &#39;navigation-control-last&#39; : &#39;navigation-control&#39; " title="Zoom In" class="navigation-control">   <!-- ko if: $data.hasText -->   <div data-bind="text: $data.text, css: $data.isActive ?  &#39;navigation-control-icon-active &#39; + $data.cssClass : $data.cssClass" class="navigation-control-icon-zoom-in">+</div>   <!-- /ko -->  <!-- ko ifnot: $data.hasText --><!-- /ko --> </div> <div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? &#39;navigation-control-last&#39; : &#39;navigation-control&#39; " title="Reset View" class="navigation-control">   <!-- ko if: $data.hasText --><!-- /ko -->  <!-- ko ifnot: $data.hasText -->  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  &#39;navigation-control-icon-active &#39; + $data.cssClass : $data.cssClass" class="navigation-control-icon-reset"><svg:svg class="cesium-svgPath-svg" width="15" height="15" viewBox="0 0 15 15"><path d="M 7.5,0 C 3.375,0 0,3.375 0,7.5 0,11.625 3.375,15 7.5,15 c 3.46875,0 6.375,-2.4375 7.21875,-5.625 l -1.96875,0 C 12,11.53125 9.9375,13.125 7.5,13.125 4.40625,13.125 1.875,10.59375 1.875,7.5 1.875,4.40625 4.40625,1.875 7.5,1.875 c 1.59375,0 2.90625,0.65625 3.9375,1.6875 l -3,3 6.5625,0 L 15,0 12.75,2.25 C 11.4375,0.84375 9.5625,0 7.5,0 z"></path></svg:svg></div>  <!-- /ko --> </div> <div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? &#39;navigation-control-last&#39; : &#39;navigation-control&#39; " title="Zoom Out" class="navigation-control-last">   <!-- ko if: $data.hasText -->   <div data-bind="text: $data.text, css: $data.isActive ?  &#39;navigation-control-icon-active &#39; + $data.cssClass : $data.cssClass" class="navigation-control-icon-zoom-out">-</div>   <!-- /ko -->  <!-- ko ifnot: $data.hasText --><!-- /ko --> </div> <!-- /ko --></div></div><div><div class="distance-legend" data-bind="visible: distanceLabel &amp;&amp; barWidth" style=""><div class="distance-legend-label" data-bind="text: distanceLabel">300 km</div><div class="distance-legend-scale-bar" data-bind="style: { width: barWidth + &#39;px&#39;, left: (5 + (125 - barWidth) / 2) + &#39;px&#39; }" style="width: 62px; left: 36.5px;"></div></div></div></div></div><div class="cesium-viewer-bottom" style="left: 0px; bottom: 0px;"><div class="cesium-widget-credits"><span class="cesium-credit-imageContainer"><span class="cesium-credit-image"><a href="https://bhuvan.nrsc.gov.in/" target="_blank"><img src="./Bhuvan4_files/isro_new.gif" alt="Bhuvan" title="Bhuvan" style="vertical-align: bottom;"></a></span></span><span class="cesium-credit-textContainer"><span class="cesium-credit-text"> </span></span></div></div><div class="cesium-viewer-selectionIndicatorContainer"><div class="cesium-selection-wrapper" data-bind="style: { &quot;top&quot; : _screenPositionY, &quot;left&quot; : _screenPositionX },css: { &quot;cesium-selection-wrapper-visible&quot; : isVisible }" style="top: -1000px; left: -1000px;"><svg:svg width="160" height="160" viewBox="0 0 160 160"><g transform="translate(80,80)"><path data-bind="attr: { transform: _transform }" d="M -34 -34 L -34 -11.25 L -30 -15.25 L -30 -30 L -15.25 -30 L -11.25 -34 L -34 -34 z M 11.25 -34 L 15.25 -30 L 30 -30 L 30 -15.25 L 34 -11.25 L 34 -34 L 11.25 -34 z M -34 11.25 L -34 34 L -11.25 34 L -15.25 30 L -30 30 L -30 15.25 L -34 11.25 z M 34 11.25 L 30 15.25 L 30 30 L 15.25 30 L 11.25 34 L 34 34 L 34 11.25 z" transform="scale(1)"></path></g></svg:svg></div></div><div class="cesium-viewer-infoBoxContainer"><div class="cesium-infoBox cesium-infoBox-bodyless" data-bind="css: { &quot;cesium-infoBox-visible&quot; : showInfo, &quot;cesium-infoBox-bodyless&quot; : _bodyless }"><div class="cesium-infoBox-title" data-bind="text: titleText"></div><button type="button" class="cesium-button cesium-infoBox-camera" data-bind="attr: { title: &quot;Focus camera on object&quot; },click: function () { cameraClicked.raiseEvent(this); },enable: enableCamera,cesiumSvgPath: { path: cameraIconPath, width: 32, height: 32 }" title="Focus camera on object" disabled=""><svg:svg class="cesium-svgPath-svg" width="32" height="32" viewBox="0 0 32 32"><path d="M 27.34375 1.65625 L 5.28125 27.9375 L 8.09375 30.3125 L 30.15625 4.03125 L 27.34375 1.65625 z M 13.84375 7.03125 C 11.412798 7.03125 9.46875 8.975298 9.46875 11.40625 L 9.46875 11.59375 L 2.53125 7.21875 L 2.53125 24.0625 L 9.46875 19.6875 C 9.4724893 20.232036 9.5676108 20.7379 9.75 21.21875 L 21.65625 7.03125 L 13.84375 7.03125 z M 28.21875 7.71875 L 14.53125 24.0625 L 25.875 24.0625 C 28.305952 24.0625 30.28125 22.087202 30.28125 19.65625 L 30.28125 11.40625 C 30.28125 9.8371439 29.456025 8.4902779 28.21875 7.71875 z"></path></svg:svg></button><button type="button" class="cesium-infoBox-close" data-bind="click: function () { closeClicked.raiseEvent(this); }">×</button><iframe class="cesium-infoBox-iframe" sandbox="allow-same-origin allow-popups allow-forms" data-bind="style : { maxHeight : maxHeightOffset(40) }" allowfullscreen="true" src="./Bhuvan4_files/saved_resource.html" style="max-height: 450px; height: 0px;"></iframe></div></div><div class="cesium-viewer-toolbar"><button type="button" class="cesium-button cesium-toolbar-button" data-bind="attr: { title: buttonTooltip },click: toggleDropDown" title="Bhuvan Satellite Imagery
+Bhuvan Terrain"><img draggable="false" class="cesium-baseLayerPicker-selected" data-bind="attr: { src: buttonImageUrl }" src="./Bhuvan4_files/sat1.jpg"></button><div class="cesium-baseLayerPicker-dropDown" data-bind="css: { &quot;cesium-baseLayerPicker-dropDown-visible&quot; : dropDownVisible }" style="max-height: 490px;"><div class="cesium-baseLayerPicker-sectionTitle" data-bind="visible: imageryProviderViewModels.length &gt; 0">Imagery</div><div class="cesium-baseLayerPicker-choices" data-bind="foreach: imageryProviderViewModels"><div class="cesium-baseLayerPicker-item cesium-baseLayerPicker-selectedItem" data-bind="css: { &quot;cesium-baseLayerPicker-selectedItem&quot; : $data === $parent.selectedImagery },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parent.selectedImagery = $data; }" title="Bhuvan Satellite imagery"><img class="cesium-baseLayerPicker-itemIcon" data-bind="attr: { src: iconUrl }" draggable="false" src="./Bhuvan4_files/sat1.jpg"><div class="cesium-baseLayerPicker-itemLabel" data-bind="text: name">Bhuvan Satellite Imagery</div></div><div class="cesium-baseLayerPicker-item" data-bind="css: { &quot;cesium-baseLayerPicker-selectedItem&quot; : $data === $parent.selectedImagery },attr: { title: tooltip },visible: creationCommand.canExecute,click: function($data) { $parent.selectedImagery = $data; }" title="Bhuvan Maps data"><img class="cesium-baseLayerPicker-itemIcon" data-bind="attr: { src: iconUrl }" draggable="false" src="./Bhuvan4_files/map2.jpg"><div class="cesium-baseLayerPicker-itemLabel" data-bind="text: name">Bhuvan Maps</div></div></div></div></div><div class="cesium-viewer-fullscreenContainer" style="display: block;"><button type="button" class="cesium-button cesium-fullscreenButton" data-bind="attr: { title: tooltip },click: command,enable: isFullscreenEnabled,cesiumSvgPath: { path: isFullscreen ? _exitFullScreenPath : _enterFullScreenPath, width: 128, height: 128 }" title="Full screen"><svg:svg class="cesium-svgPath-svg" width="128" height="128" viewBox="0 0 128 128"><path d="M 83.96875 17.5625 L 83.96875 17.59375 L 76.65625 24.875 L 97.09375 24.96875 L 76.09375 45.96875 L 81.9375 51.8125 L 102.78125 30.9375 L 102.875 51.15625 L 110.15625 43.875 L 110.1875 17.59375 L 83.96875 17.5625 z M 44.125 17.59375 L 17.90625 17.625 L 17.9375 43.90625 L 25.21875 51.1875 L 25.3125 30.96875 L 46.15625 51.8125 L 52 45.96875 L 31 25 L 51.4375 24.90625 L 44.125 17.59375 z M 46.0625 76.03125 L 25.1875 96.875 L 25.09375 76.65625 L 17.8125 83.9375 L 17.8125 110.21875 L 44 110.25 L 51.3125 102.9375 L 30.90625 102.84375 L 51.875 81.875 L 46.0625 76.03125 z M 82 76.15625 L 76.15625 82 L 97.15625 103 L 76.71875 103.0625 L 84.03125 110.375 L 110.25 110.34375 L 110.21875 84.0625 L 102.9375 76.8125 L 102.84375 97 L 82 76.15625 z"></path></svg:svg></button></div></div></div>
+<div id="loadingOverlay"><img src="./Bhuvan4_files/loading.gif" style="	float: left;	position: fixed;	_position:absolute;	top: 95%; left: 5px;	_top:expression(eval(document.body.scrollTop)+150px);	z-index: 99999;"> </div>
+<div id="toolbar"></div>
+<div id="logging">
+</div>
+
+
+<div id="searchdiv"></div>
+
+<!--add layer dialogue div-->
+
+
+
+
+<div id="recordplaywidget" class="btn-group btn-group-justified">
+	<button type="button" id="record_start" class="btn btn-info">Start Recording</button> 
+	<button type="button" id="record_play" class="btn btn-info" disabled="disabled">Start Playing</button>
+	<button type="button" id="record_download" class="btn btn-info" disabled="disabled">Download</button>
+</div>
+
+
+
+<div title="ADD Layer" id="addlayers" style="display:none;width:100%;">
+ <div class="first line">
+	<span>My Layers </span>
+	<table id="layers_list">
+
+
+
+	</table>
+  </div>
+  <div class="second">
+	  
+		<span id="clrpicker" style="display:none;">
+			<b>Select Color</b> &nbsp; 
+			<input id="clr" class="color" title="color picker" style="cursor: pointer; background-image: none; background-color: rgb(102, 255, 0); color: rgb(0, 0, 0);" value="00ff00" size="6">
+		</span>
+		<span id="layers"></span>
+	 
+	</div>
+</div>
+<div style="clear:both"></div>
+
+
+<!--end-->	
+
+<!--Info dialogue div-->
+
+<!--end of info tool-->	
+
+<!--add content dialogue div-->
+<script>
+	function validateForm()
+	{
+			if(document.addpoint.latitude.value == "")
+			{
+				alert("Please Click on the Terrian");
+			
+				return false;
+			}
+			if(document.addpoint.longitude.value == "")
+			{
+				alert("Please Click on the Terrian");
+				
+				return false;
+			}
+			
+			if(document.addpoint.pntname.value == "")
+			{
+				alert("Please provide Remark Subject!");
+				document.addpoint.pntname.focus();
+				return false;
+			}
+			if(document.addpoint.comments.value == "")
+			{
+				alert("Please provide Remarks!");
+				document.addpoint.comments.focus();
+				return false;
+			}
+			
+			
+			var fname=document.getElementById('file').value;
+			if(fname!=''){
+					var fileext= new Array('jpg', 'jpeg','png','bmp','gif','tif','tiff');  
+					fname=fname.toLowerCase();			
+					var length=fileext.length;
+					var index=-1;
+					for(i=0;i<length;++i)
+					{   
+						index=fname.lastIndexOf(fileext[i]);
+						if(index!=-1)
+						   break;			
+					}
+					if(i==length)
+					{
+					   alert("Please provide file type jpg/jpeg/png/bmp/gif/tif format");
+					   return false;
+
+					}
+			}
+			return true;
+	}
+	
+
+
+</script>
+
+<!--end of add content-->
+
+
+<div id="modeldiv" title="3D Models"></div>			
+
+<img id="ld" src="./Bhuvan4_files/loading.gif" style="	float: left;	position: fixed;	_position:absolute;	top: 95%; left: 5px;	_top:expression(eval(document.body.scrollTop)+150px);	z-index: 99999;"> 
+
+<div id="LogoutFrame" style="display: none;"></div>
+<div id="LoginFrame" style="display: none;"></div>
+<div id="addcontentFrame" style="display: none;"></div>
+<div id="distance_dialog" title="Measure Distance" style="display:none">
+	<span class="bg-warning text-danger"> 1.Left click on the globe to select point.<br>2.Select minimum of 2 points. <br>3.Click on Mesure Distance to measure distance.<br></span> 
+		<p id="distance_locations"></p>
+     
+		<p id="toal_distance"></p>
+        <p id="distance_warning_msg"></p>
+</div>  
+
+
+
+<div id="area_dialog" title="Measure Area" style="display:none">
+	<span class="bg-warning text-danger"> 1.Left click on the globe to select point.<br>2.Select minimum of 3 points. <br>3.Click on Measure Area to measure area.<br></span> 
+		<p id="area_locations"></p>
+		<p id="total_area"></p>
+        <p id="area_warning_msg"></p>
+</div>  
+<div id="terrain_dialog" title="Terrain Profile" style="display:none">
+		<span class="bg-warning text-danger"> 1.Left click on the globe to select point.<br>2.Select minimum of 2 points. <br>3.Enter Sampling Distance.<br>4.Click on Show Profile to View Profile <br></span> 
+        <p>Enter the sampling distance</p>
+        <input type="number" id="sample_dist" min="1" required="">
+        <p id="terrain_warning_msg" style="color:red;"></p>
+</div>  	 
+<div id="terrainprofile" title="Terrain Profile" style="display:none">
+		<div id="tester" style="width:512px;height:400px;"></div>
+		<span id="areal_distance"></span>
+</div> 
+
+<link rel="stylesheet" href="./Bhuvan4_files/alertify.css">
+<link rel="stylesheet" href="./Bhuvan4_files/bootstrap.min.css">
+
+
+ 
+  <link rel="stylesheet" href="./Bhuvan4_files/jquery-ui.css">
+
+  <script src="./Bhuvan4_files/jquery.js.download"></script>
+  <script src="./Bhuvan4_files/jquery-ui.js.download"></script>
+   <script type="text/javascript" src="./Bhuvan4_files/typeahead.js.download"></script> 
+   <script src="./Bhuvan4_files/alertify.js.download"></script>
+<script type="text/javascript" src="./Bhuvan4_files/plotly-latest.min.js.download"></script>
+
+
+
+<script type="text/javascript">
+//override defaults
+alertify.defaults.transition = "slide";
+alertify.defaults.theme.ok = "btn btn-primary";
+alertify.defaults.theme.cancel = "btn btn-danger";
+alertify.defaults.theme.input = "form-control";
+</script>  
+   
+<script type="text/javascript" src="./Bhuvan4_files/script19.js.download"> </script><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" aria-describedby="bhuvanlayers" aria-labelledby="ui-id-1" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-1" class="ui-dialog-title">Bhuvan Layers</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="bhuvanlayers" class="ui-dialog-content ui-widget-content"> <input id="chkadminb" type="checkbox" style="float:left"><label style="float:left">Administrative Boundaries</label><br><input id="chktrans" type="checkbox" style="float:left"><label style="float:left">Infrastructure (Road &amp; Rail)</label><br><input id="chkpanchayat" type="checkbox" style="float:left"><label style="float:left">Panchayat Boundaries</label><br><input id="chksubbasin" type="checkbox" style="float:left"><label style="float:left">Sub Basin</label><br><input id="chkbasin" type="checkbox" style="float:left"><label style="float:left">Basin</label><br><input id="chkriver" type="checkbox" style="float:left"><label style="float:left">Rivers</label><br><span style="color:red">Footprints used for 3d view of built-up area are from OpenStreetMap Contributors.</span></div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" aria-describedby="infotool" aria-labelledby="ui-id-2" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-2" class="ui-dialog-title">Info Tool</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="infotool" style="" class="ui-dialog-content ui-widget-content">
+	
+	<table>
+		<tbody><tr>
+			<th>Lon  :</th>
+			<td><span id="lon"> N/A </span>  </td>
+		</tr>
+		<tr>
+			<th>Lat  :</th>
+			<td><span id="lat"> N/A </span>  </td>
+		</tr>
+		<tr>
+			<th>Alt  :</th>
+			<td><span id="alt"> N/A </span> </td>
+		</tr>			
+	</tbody></table>
+	
+</div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" aria-describedby="recordplay" aria-labelledby="ui-id-3" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-3" class="ui-dialog-title">&nbsp;</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="recordplay" style="" class="ui-dialog-content ui-widget-content">
+	<video id="recorded" autoplay="" controls=""></video>
+</div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" aria-describedby="addcontent_dialogue" aria-labelledby="ui-id-4" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-4" class="ui-dialog-title">Add Content</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="addcontent_dialogue" style="width: 100%; text-align: center;" class="ui-dialog-content ui-widget-content">
+	
+	<span id="addcontent_status" class="bg-warning text-danger" style="width:100%;text-align:center;"> </span> 
+	<font face="Arial, Arial, Helvetica" color="#FFFF00">		
+		<form name="addpoint" method="POST" id="addcontent_form" enctype="multipart/form-data">
+			<input type="hidden" name="csrf" value="c65dcb4358011ff6938e91e1e530bf269113a0e2">
+			<table colspan="0" cellspacing="0" cellpadding="4" style="border:1px solid black; font-family: Verdana; font-size: 8pt;" bordercolordark="#666666" bordercolorlight="#CCCCCC">
+					<tbody><tr><td colspan="2" height="30" style="text-align:center" bgcolor="#d2dbec"><font face="Arial, Arial, Helvetica" size="2pt" color="#084080"><b>Add Point Data</b></font></td></tr>
+					<tr><td valign="top" width="35%"><label for="latitude">Latitude</label></td><td valign="top" id="latitude">N/A</td></tr>		
+					<tr><td valign="top" width="35%"><label for="longitude">Longitude</label></td><td valign="top" id="longitude">N/A</td></tr>
+					<tr><td valign="top" width="35%"><label for="height">height</label></td><td valign="top" id="height">N/A</td></tr>
+									
+					<tr><td valign="top" width="35%"><label for="username">User Name</label></td><td valign="top" id="username"> </td></tr>
+					<tr><td valign="top" width="35%"><label for="category">Category *</label></td><td valign="top" id="content_category">
+				
+					
+					</td></tr>
+					<tr name="cname" id="cname" style="display:none;"><td valign="top" width="35%"><label for="Category Name">Category Name *</label></td><td valign="top"><input style="font-family: verdana; font-size: 8pt" type="text" id="cnametxt" name="categoryname" maxlength="30" size="30" value=""></td></tr>
+					<tr><td valign="top" width="35%"><label for="pointname">Subject *</label></td><td valign="top"><input style="font-family: verdana; font-size: 8pt" type="text" name="pntname" maxlength="50" size="30"></td></tr>
+					<tr><td valign="top" width="35%"><label for="comments">Remarks *</label></td><td valign="top"><textarea style="font-family: verdana; font-size: 8pt" name="comments" maxlength="200" cols="27" rows="4"></textarea></td></tr>
+					<tr><td valign="top" width="35%"><label for="file">Image</label></td><td valign="top"><input style="font-family: verdana; font-size: 8pt" type="file" name="file" id="content_file"></td></tr>
+					<tr><td colspan="2" height="60" style="text-align:center"><input type="submit" name="submit" id="submit" value="Submit"></td></tr>
+			</tbody></table>
+			<div id="information"><span style="color:#FF0000; font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:bold;">On submitting, you are agreeing to 'user data policy' and the Added Content will be visible after validation</span></div>
+		</form>			
+	</font>
+	
+</div></div>
+
+
+
+  <script>
+  
+
+
+
+  var imagecount = 0;
+
+var val ="Google Chrome"+"87.0.4280.88";
+if(val=='Mozilla Firefox30.0')
+alert("Currently we are facing frequent crash with Mozilla Firefox version 30.0. Please change your FireFox version or use Google Chrome to access Bhuvan 3D");
+  </script>
+
+
+
+</body></html>

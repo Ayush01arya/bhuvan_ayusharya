@@ -1,0 +1,2076 @@
+var providerViewModels = [];
+
+
+providerViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Satellite Imagery',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/ImageryProviders/sat1.jpg'),
+    tooltip : 'Bhuvan Satellite imagery',
+    creationFunction : function() {
+         return new  Cesium.WebMapServiceImageryProvider({ 
+			url : 'https://bhuvan-app1.nrsc.gov.in/tilecache/tilecache.py?',
+			parameters: { 
+								format:'image/png', 
+								transparent:'true'
+							},				
+		    layers: 'bhuvan_img',           
+			//proxy: new Cesium.DefaultProxy('proxy.php?url='), //to be commmented when making live
+		    credit : ' '
+		})
+    }
+}));
+
+/*
+providerViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Satellite Imagery',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/ImageryProviders/sat1.jpg'),
+    tooltip : 'Bhuvan Satellite imagery',
+    creationFunction : function() {
+         return new Cesium.createTileMapServiceImageryProvider({
+			url : 'https://bhuvan-app1.nrsc.gov.in/mapcache/tms/1.0.0/bhuvan_imagery@WGS84/',
+			maximumLevel : 18,
+			fileExtension:'jpg',
+			//proxy: new Cesium.DefaultProxy('proxy.php?url='), //to be commmented when making live
+		    credit : ' '
+		})
+    }
+}));
+*/
+
+/*providerViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Satellite Imagery',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/ImageryProviders/sat1.jpg'),
+    tooltip : 'Bhuvan Satellite imagery',
+    creationFunction : function() {
+         return new  Cesium.WebMapServiceImageryProvider({ 
+			url : 'https://bhuvan-app1.nrsc.gov.in/tilecache/tilecache.py?',
+			parameters: { 
+								format:'image/png', 
+								transparent:'true'
+							},				
+		    layers: 'bhuvan_imagery',           
+			//proxy: new Cesium.DefaultProxy('proxy.php?url='), //to be commmented when making live
+		    credit : ' '
+		})
+    }
+}));
+
+providerViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Satellite Imagery',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/ImageryProviders/sat1.jpg'),
+    tooltip : 'Bhuvan Satellite imagery',
+    creationFunction : function() {
+         return new Cesium.UrlTemplateImageryProvider({
+			url : 'https://bhuvan-app1.nrsc.gov.in/mapcache/tms/1.0.0/bhuvan_imagery@WGS84/{z}/{x}/{reverseY}.jpg',
+			maximumLevel : 18,
+			tilingScheme: new Cesium.GeographicTilingScheme(),
+			//proxy: new Cesium.DefaultProxy('proxy.php?url='), //to be commmented when making live
+		    credit : ' '
+		})
+    }
+}));
+
+*/
+ 
+providerViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Maps',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/ImageryProviders/map2.jpg'),
+    tooltip : 'Bhuvan Maps data',
+    creationFunction : function() {
+       return new  Cesium.WebMapServiceImageryProvider({ 
+		        url : 'https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms/',  
+				parameters: { 
+								format:'image/png', 
+								transparent:'true'
+							},				
+		        layers: 'india3'
+				//proxy : new Cesium.DefaultProxy('proxy.php?url=')
+		    });
+    }
+}));
+ 
+ var terrainViewModels = [];
+terrainViewModels.push(new Cesium.ProviderViewModel({
+    name : 'Bhuvan Terrain',
+    iconUrl : Cesium.buildModuleUrl('/Widgets/Images/TerrainProviders/Ellipsoid.png'),
+    tooltip : 'Bhuvan Geo-Server Terrain Provider',
+    creationFunction : function() {
+			return new Cesium.GeoserverTerrainProvider({
+					//url : "http://bhuvan-vec2.nrsc.gov.in/bhuvan/global_dem/srtm_global_90m_translated/ows",
+					url : "https://bhuvan-app1.nrsc.gov.in/vec2terrain/global_dem/srtm_global_90m_translated/ows",
+					layerName: "srtm_global_90m_translated"				  
+				});
+    }
+})); 
+
+
+	  
+var viewer = new Cesium.Viewer('cesiumContainer', {
+
+	baseLayerPicker : true,
+	animation:false,
+	timeline:false,
+	geocoder:false,
+	homeButton:false,
+	navigationHelpButton:false,
+	navigationInstructionsInitiallyVisible:false,
+	scene3DOnly:true,
+	imageryProviderViewModels : providerViewModels,
+    selectedImageryProviderViewModel : providerViewModels[0],
+    terrainProviderViewModels : terrainViewModels,
+    selectedTerrainProviderViewModel : terrainViewModels[0],
+	contextOptions: {
+			webgl:{preserveDrawingBuffer:true}
+	}
+}
+);
+var scene = viewer.scene;
+var creditDisplay = scene.frameState.creditDisplay;
+
+var cesiumCredit = new Cesium.Credit('Bhuvan', 'img/isro_new.gif', 'https://bhuvan.nrsc.gov.in/');
+creditDisplay.addDefaultCredit(cesiumCredit);
+
+var options = {};
+
+options.enableCompass= true;
+options.enableZoomControls= true;
+options.enableDistanceLegend= true;
+options.enableCompassOuterRing= true;
+options.defaultResetView=new Cesium.Cartographic.fromDegrees(78.3352765625, 21.173860625, 6900000);
+viewer.extend(Cesium.viewerCesiumNavigationMixin, options);
+	
+	
+var event_handler=new EventHandler(viewer);
+var layers = viewer.scene.imageryLayers;
+
+add_layer_np('vector:city_hq','https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms'); 	
+
+
+  
+	
+	if(GetURLParameter("l"))
+	{
+	var l=GetURLParameter("l");
+	var b=GetURLParameter("b");
+	var ps=new Cesium.Cartesian3.fromDegrees(l,b,7000);
+	scene.camera.setView({destination : ps});
+	}
+	else
+	{
+	var ps=new Cesium.Cartesian3.fromDegrees(78.3352765625, 21.173860625, 6900000);
+	scene.camera.setView({destination : ps});
+	}
+	
+
+	
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+	
+function makeline(r)
+{
+
+ var entity = viewer.entities.add({
+  polyline : {
+    positions : Cesium.Cartesian3.fromDegreesArray(r),
+    width : 8,
+    material : new Cesium.PolylineGlowMaterialProperty({
+	glowPower : 0.2,
+	color : Cesium.Color.BLUE
+})
+  }
+});
+
+
+
+
+}
+
+	
+	function zoom_in(lon,lat,elev)
+	{
+	
+  	scene.camera.flyTo({  destination : Cesium.Cartesian3.fromDegrees(lon, lat, elev)   });
+	}
+	
+	
+		
+	$('body').on('click','#search_button',function() {
+	find();
+	
+	});
+	
+	$('#searchval').bind("enterKey",function(e){
+  find();
+});
+$('#searchval').keyup(function(e){
+    if(e.keyCode == 13)
+     $(this).trigger("enterKey");
+});
+	
+function find()
+{
+
+	var q=$("#searchval").val();
+	if(q=="")
+	return;
+	
+	var iChars = "!@#$%^&*()+=[]\\\';/{}|\":<>?";
+    for (var i = 0; i <q.length; i++) {
+         if (iChars.indexOf(q.charAt(i)) != -1) {
+              alert("Please do not give special characters");
+            return;
+         }
+    }
+	
+	$.ajax({url:"get/search.php?q="+q,success:function(result){
+      
+   $("#searchdiv").html(result);
+   $("#searchdiv").dialog();
+   var num=parseInt($("#searchnum").html());
+   
+	for(var i=0;i<num;i++)
+	{
+	
+	$('body').on('click','#find'+i,function() {
+var id=this.id.substring(4);
+var temp = $("#findtry"+id).html().split(",");
+
+	zoom_in(parseFloat(temp[1]),parseFloat(temp[0]),7000)});
+	}
+   
+   }});
+}
+	
+	//<input id='chkbuilt' type='checkbox' style='float:left' ><label style='float:left'>Built-up Urban Models</label><label style='float:left'> (<a style='cursor:pointer' id='zbnglr' href='#'><u>Bangalore</u></a> &nbsp; <a style='cursor:pointer' id='zggn' href='#'><u>Gurgaon</u></a>&nbsp; <a style='cursor:pointer' id='zhyd' href='#'><u>Hyderabad</u></a>&nbsp; <a style='cursor:pointer' id='zkol' href='#'><u>Kolkatta</u></a> &nbsp; <a style='cursor:pointer' id='zmum' href='#'><u>Mumbai</u></a>)</label>
+	
+	
+$("#bhuvanlayers").html(" <input id='chkadminb' type='checkbox' style='float:left' ><label style='float:left'>Administrative Boundaries</label><br/><input id='chktrans'  type='checkbox' style='float:left' ><label style='float:left'>Infrastructure (Road & Rail)</label><br/><input id='chkpanchayat' type='checkbox' style='float:left' ><label style='float:left'>Panchayat Boundaries</label><br/><input id='chksubbasin' type='checkbox' style='float:left' ><label style='float:left'>Sub Basin</label><br/><input id='chkbasin' type='checkbox' style='float:left' ><label style='float:left'>Basin</label><br/><input id='chkriver' type='checkbox' style='float:left' ><label style='float:left'>Rivers</label><br/><span style='color:red'>Footprints used for 3d view of built-up area are from OpenStreetMap Contributors.</span>");	
+
+
+
+$('body').on('click','#chktrans',function() { 
+if(this.checked) add_layer_np("mmi:mmi_india","https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms/"); 
+else remove_layer("mmi:mmi_india");
+});	
+
+
+
+
+//$('#chktrans').prop( "checked", true );
+
+
+$('body').on('click','#chkadminb',function() { 
+if(this.checked) add_layer_np("basemap:admin_group","https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms/"); 
+else remove_layer("basemap:admin_group");
+});	
+
+$('#chkadminb').click();
+
+
+
+$('body').on('click','#chkpanchayat',function() { 
+if(this.checked) add_layer_np("india_wris:nrega_panchayat","https://bhuvan-app1.nrsc.gov.in/vec2wms/gwc/service/wms/"); 
+else remove_layer("india_wris:nrega_panchayat");
+});	
+
+$('body').on('click','#chksubbasin',function() { 
+if(this.checked) add_layer_np("hydrology:SUBBASIN","https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms/"); 
+else remove_layer("hydrology:SUBBASIN");
+});	
+
+$('body').on('click','#chkbasin',function() { 
+if(this.checked) add_layer_np("hydrology:BASIN","https://bhuvan-app1.nrsc.gov.in/vec1wms/gwc/service/wms/"); 
+else remove_layer("hydrology:BASIN");
+});	
+
+
+$('body').on('click','#chkriver',function() { 
+if(this.checked) add_layer_np("admin:RIVER_250K","https://bhuvan-app1.nrsc.gov.in/vec2wms/gwc/service/wms/"); 
+else remove_layer("admin:RIVER_250K");
+});	
+
+
+var bhuvanlayers_box = $("#bhuvanlayers").dialog({
+			autoOpen: false,
+			resizable: false,
+			width: 350,
+			close: function () {}				
+	});
+
+
+$('body').on('click','#overlaylayer',function() {
+	bhuvanlayers_box.dialog("open");
+});
+
+
+var active_tool=null;
+var active_tool_id=null;
+
+
+
+var distance_measure=false;
+var measure_area=false;
+var drawHelper=null;
+var toolbar=null;
+var InfoTool=null;
+var labels=null;
+
+
+/*draw tool start*/
+function getLoggingString(cartesian)
+{
+	
+	var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+	var longitudeString = Cesium.Math.toDegrees(cartographic.longitude).toFixed(3);
+	var latitudeString = Cesium.Math.toDegrees(cartographic.latitude).toFixed(3);
+	return longitudeString+ "\u00B0 , " + latitudeString+"\u00B0";
+}
+  
+
+$('body').on('click','#draw',function() {
+	
+	if(!drawHelper)
+	{
+		drawHelper = new DrawHelper(viewer);
+		toolbar = drawHelper.addToolbar(document.getElementById("toolbar"), {
+			buttons: ['marker', 'polyline', 'polygon', 'circle', 'extent']
+		});
+		
+		clear_tools();
+		active_tools.push({obj:drawHelper});        
+		toolbar.addListener('markerCreated', function(event) {
+			$("#logging").html('Marker created at ' + getLoggingString(event.position));
+			// create one common billboard collection for all billboards
+			var b = new Cesium.BillboardCollection();
+			scene.primitives.add(b);
+			var billboard = b.add({
+				show : true,
+				position : event.position,
+				pixelOffset : new Cesium.Cartesian2(0, 0),
+				eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
+				horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
+				verticalOrigin : Cesium.VerticalOrigin.CENTER,
+				scale : 1.0,
+				image: './img/glyphicons_242_google_maps.png',
+				color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
+			});
+			billboard.setEditable();
+		});
+		toolbar.addListener('polylineCreated', function(event) {
+			$("#logging").html('Polyline created with ' + event.positions.length + ' points');			
+            var polyline = new DrawHelper.PolylinePrimitive({
+				positions: event.positions,
+				width: 5,
+				geodesic: true
+			});
+			scene.primitives.add(polyline);            
+			/*scene.primitives.add(new Cesium.PolylinePrimitive({
+                                    geometryInstances:polyline,
+                                    appearance:Cesium.PolylineColorAppearance()
+                                    }));   */         
+			polyline.setEditable();
+			polyline.addListener('onEdited', function(event) {
+				$("#logging").html('Polyline edited, ' + event.positions.length + ' points');
+			});
+
+		});
+		toolbar.addListener('polygonCreated', function(event) {
+			$("#logging").html('Polygon created with ' + event.positions.length + ' points');
+			var polygon = new DrawHelper.PolygonPrimitive({
+				positions: event.positions,
+				//material : Cesium.Material.fromType('Checkerboard')
+			});
+			scene.primitives.add(polygon);
+			polygon.setEditable();
+			polygon.addListener('onEdited', function(event) {
+				$("#logging").html('Polygon edited, ' + event.positions.length + ' points');
+			});
+
+		});
+		toolbar.addListener('circleCreated', function(event) {
+			$("#logging").html('Circle created: center is ' + getLoggingString(event.position) + ' and radius is ' + event.radius.toFixed(1) + ' meters');
+			var circle = new DrawHelper.CirclePrimitive({
+				center: event.center,
+				radius: event.radius,
+				//material: Cesium.Material.fromType(Cesium.Material.RimLightingType)
+			});
+			scene.primitives.add(circle);
+			circle.setEditable();
+			circle.addListener('onEdited', function(event) {
+				$("#logging").html('Circle edited: radius is ' + event.radius.toFixed(1) + ' meters');
+			});
+		});
+		//alert("draw circle over.....");
+		toolbar.addListener('extentCreated', function(event) {
+			var extent = event.extent;
+			$("#logging").html('Extent created (N: ' + extent.north.toFixed(3) + ', E: ' + extent.east.toFixed(3) + ', S: ' + extent.south.toFixed(3) + ', W: ' + extent.west.toFixed(3) + ')');
+			var extentPrimitive = new DrawHelper.ExtentPrimitive({
+				extent: extent,
+				//	material: Cesium.Material.fromType(Cesium.Material.StripeType)
+			});
+			scene.primitives.add(extentPrimitive);
+			extentPrimitive.setEditable();
+			extentPrimitive.addListener('onEdited', function(event) {
+				$("#logging").html('Extent edited: extent is (N: ' + event.extent.north.toFixed(3) + ', E: ' + event.extent.east.toFixed(3) + ', S: ' + event.extent.south.toFixed(3) + ', W: ' + event.extent.west.toFixed(3) + ')');
+			});
+		});
+		toolbar.addListener('destroy_drawtool', function() {
+			drawHelper=null;
+			$("#toolbar").html("");
+			$("#logging").css('display','none');
+		});
+
+    }
+    else
+	{                       
+        drawHelper.destroy();        
+		drawHelper=null;
+		//$("#toolbar").html("");
+	}
+
+});
+
+ 
+
+/*draw tool end */
+
+/* start of info tool */
+
+var infobox=$("#infotool").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: 350,
+				close: function () {		
+										
+										InfoTool.destroy();
+									}				
+		});
+
+$('body').on('click','#info',function() {
+	
+	InfoTool=new Info(viewer);
+	infobox.dialog("open");
+});
+
+
+
+
+/*end of info tool*/
+
+/** start of record tool **/
+
+var recordplaybox=$("#recordplay").dialog({
+				resizable: false,
+				autoOpen: false,	
+				position: { my : "centre" , at: "centre" ,of: window },
+				width: viewer.canvas.width-(20*viewer.canvas.width/100),	
+				height:"auto",
+				close:function()
+						{
+							$("#record_play").text("Start Playing");
+						},
+				
+		});
+
+var recordplaydownload;
+$('body').on('click','#record',function() {
+	
+	if(!recordplaydownload)
+	{
+		recordplaydownload=new RecordPlayDownload(viewer,	document.getElementById("recorded"));
+		$("#recordplaywidget").css("display","block");
+		$("#record_start").text("Start Recording");
+		$("#record_play").attr('disabled','disabled');
+		$("#record_download").attr('disabled','disabled');
+
+	}else
+	{
+		recordplaydownload.destroy();
+		recordplaydownload.destroy();
+		recordplaydownload=null;
+		
+		$("#recordplaywidget").css("display","none");
+	}
+
+
+});
+
+
+$('body').on('click','#record_start',function() {
+	
+
+	if($("#record_start").text()==="Start Recording")
+	{
+		recordplaybox.dialog("close");
+		$("#record_play").text("Start Playing");
+		recordplaydownload.start();
+		$("#record_start").text("Stop Recording");
+		
+		
+		$("#record_play").attr('disabled','disabled');
+		$("#record_download").attr('disabled','disabled');
+	}else
+	{
+		recordplaydownload.stop();
+		$("#record_start").text("Start Recording");
+		$("#record_play").removeAttr('disabled');
+		$("#record_download").removeAttr('disabled');
+	}
+
+
+
+
+});
+
+$('body').on('click','#record_play',function() {
+	
+
+	if($("#record_play").text()==="Start Playing")
+	{
+		recordplaybox.dialog("open");
+		recordplaydownload.play();
+		$("#record_play").text("Stop Playing");
+	}else
+	{
+		recordplaybox.dialog("close");
+		$("#record_play").text("Start Playing");
+	}
+
+
+
+
+});
+
+$('body').on('click','#record_download',function() {
+	
+
+	recordplaydownload.download();
+
+
+});
+
+/** end of record tool **/
+
+
+
+/* start of add content */
+ $('body').on('submit', '#addcontent_form',function (e) {
+	 
+
+	e.preventDefault();
+	var cameraPosition = viewer.scene.camera.positionWC;
+	var ellipsoidPosition = viewer.scene.globe.ellipsoid.scaleToGeodeticSurface(cameraPosition);
+	var distance = Cesium.Cartesian3.magnitude(Cesium.Cartesian3.subtract(cameraPosition, ellipsoidPosition, new Cesium.Cartesian3()));
+
+							var username=$("#username").html();
+							var longitude=$("#longitude").html();
+							var latitude=$("#latitude").html();
+							
+				if(longitude=="N/A")		
+				{
+					alert("click on terrain to add content");
+					return false;
+				}
+				if(latitude=="N/A")		
+				{
+					alert("click on terrain to add content");
+					return false;
+				}
+				if(height=="N/A")		
+				{
+					alert("click on terrain to add content");
+					return false;
+				}
+				
+				if(document.addpoint.pntname.value  == "")
+				{
+					alert("Please provide Subject!");
+					document.addpoint.pntname.focus();
+					return false;
+				}
+			if(document.addpoint.comments.value == "")
+			{
+				alert("Please provide Remarks!");
+				document.addpoint.comments.focus();
+				return false;
+			}
+										
+							var formData = new FormData(this);
+							formData.append("username",username);
+							formData.append("longitude",longitude);
+							formData.append("latitude",latitude);
+							formData.append("addzoomlevel",distance);
+							
+
+				$.ajax({
+						  url: "addcontent.php",
+						  type: "post", 
+						  processData: false,
+						  contentType: false,
+						  data:formData,
+						  beforeSend:function(){
+
+					
+						  },
+						  success: function(response) {
+				
+								//console.log(response);
+								var res = response.split('::');
+								if(res[0]=='Error')
+								{
+									$("#addcontent_status").html("It seems there is some problem. please contact administrator.");
+									
+								}
+								else
+								{		   
+										$("#addcontent_status").html("Point is submitted successfully.");
+										viewer.entities.remove(add_content_marker);
+										$("#addcontent_form").load(document.URL +  ' #addcontent_form',function() {
+										  $("#addcontent").click();
+										});
+								}
+						
+						  },
+						  error: function(xhr) {
+							console.log(xhr);
+						  },
+						  complete:function(){
+
+						
+						  }
+						});
+	
+});
+
+
+function showdescription(click)
+{
+	
+	  var pickedObject = viewer.scene.pick(click.position); 	
+       if (!(viewer.selectedEntity && viewer.selectedEntity.properties)) {
+    
+        viewer.selectedEntity = undefined;
+    }
+    
+     
+}
+event_handler.registerEvent(Cesium.ScreenSpaceEventType.LEFT_CLICK,showdescription);
+viewer.infoBox.frame.style.maxHeight="800px";
+var mycontent_datasource;
+$('body').on('click','#myaccount',function() 
+{
+
+if(mycontent_datasource)
+{
+	viewer.dataSources.remove(mycontent_datasource);
+	mycontent_datasource=null;
+}else
+{
+	viewer.infoBox.frame.style.maxHeight="800px";
+
+	var view_rectangle=viewer.scene.camera.computeViewRectangle();
+	var northeast=Cesium.Rectangle.northeast(view_rectangle) ;
+	var southeast=Cesium.Rectangle.southeast(view_rectangle);
+	var southwest=Cesium.Rectangle.southwest(view_rectangle);
+	var northwest=Cesium.Rectangle.northwest(view_rectangle);
+
+
+
+
+	var url="/2dresources/user_content/portalviewernew.php?sql="+Cesium.Math.toDegrees(northeast.longitude)+" "+Cesium.Math.toDegrees(northeast.latitude)+","+Cesium.Math.toDegrees(southeast.longitude)+" "+Cesium.Math.toDegrees(southeast.latitude)+","+Cesium.Math.toDegrees(southwest.longitude)+" "+Cesium.Math.toDegrees(southwest.latitude)+","+Cesium.Math.toDegrees(northwest.longitude)+" "+Cesium.Math.toDegrees(northwest.latitude)+","+Cesium.Math.toDegrees(northeast.longitude)+" "+Cesium.Math.toDegrees(northeast.latitude)+"&category=c102&zoom=16903911&username="+bhuvan_user_name;
+
+
+	  promise = Cesium.GeoJsonDataSource.load(url, {
+			stroke: Cesium.Color.HOTPINK,
+			fill: Cesium.Color.PINK.withAlpha(0.5),
+			strokeWidth: 3,
+			clampToGround:true,
+			
+		});
+	   promise.then(function(dataSource) { 
+			mycontent_datasource=dataSource;
+		   viewer.dataSources.add(dataSource); 
+
+		   var entities = dataSource.entities.values; 
+		  for (var i = 0; i < entities.length; i++) { 
+		  var html_description="";
+		  if(entities[i].properties.photo)
+		  {
+			 html_description=" <br/><div> <img style='width:450px;height:150px' src='https://bhuvan-app1.nrsc.gov.in/2dresources/user_content/upload/photos/"+entities[i].properties.photo +"' /> </div><br/>";
+		  }
+			   html_description += "<table class='cesium-infoBox-defaultTable'>"+
+										   "<tr><th>Longitude</th><td>"+entities[i].properties.lon+"</td></tr>"+
+										   "<tr><th>Latitude</th><td>"+entities[i].properties.lat+"</td></tr>"+
+										   "<tr><th>Information</th><td>"+entities[i].properties.info+"</td></tr>"+
+										   "<tr><th>Time Stamp</th><td>"+entities[i].properties.posttime+"</td></tr>"+
+										   "</table>"; 
+										   
+				entities[i].description=html_description;
+
+		   }  
+
+	   }).otherwise(function(error){ 
+		   //Display any errors encountered while loading. 
+		   window.alert(error);
+	   });
+}	
+	
+
+	
+});
+
+
+var addcontent_box=$("#addcontent_dialogue").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: 400,
+				height:450,
+				close: function () {		
+										viewer.entities.remove(add_content_marker);
+										event_handler.unregisterEvent(Cesium.ScreenSpaceEventType.LEFT_CLICK,update_location);
+										
+									}				
+		});
+
+		
+		
+		
+$('body').on('click','#addcontent',function() {
+	
+
+
+
+	
+$.ajax({
+			  url: "status.php",
+			  type: "get", 
+			  data:{}, 
+			  dataType: 'json',
+			  beforeSend:function(){
+
+		
+			  },
+			  success: function(response) {
+				//console.log(response);
+				if(response["status"]==0)
+				{
+					//alert("to add content user needs to log in");
+					 alertify.set('notifier','position', 'top-right');
+					alertify.success('Please Login to add content',3);
+					
+				}else
+				{
+					
+					
+					
+					$.ajax({
+							  url: "content_category.php",
+							  type: "get", 
+							  dataType: 'json',
+							  beforeSend:function(){
+
+						
+							  },
+							  success: function(response) {
+								//var response= JSON.parse(json_reply)
+								//console.log(response["result"][0]["name"]);
+								if(response["status"]==1)
+								{
+									var category_list=JSON.parse(response["result"])
+									var temp="<select id='ctg' name='category' style='font-family: verdana; font-size: 8pt; width: 200px;color:black;'>";
+									for (var i = 0; i <category_list.length; i++) 
+									{ 
+										temp += "<option value='"+category_list[i]["id"]+"'>"+category_list[i]["name"]+"</option>";
+									}
+									temp+="</select>";
+									$("#content_category").html(temp);
+								}else
+								{
+									alert(response["message"]);
+								}
+								
+									
+							
+							  },
+							  error: function(xhr) {
+								console.log(xhr);
+							  },
+							  complete:function(){
+
+							
+							  }
+							});				
+					
+					
+					
+					
+					$("#username").html(response["login_name"]);
+					event_handler.registerEvent(Cesium.ScreenSpaceEventType.LEFT_CLICK,update_location);
+				
+					addcontent_box.dialog("open");
+				}
+			
+			  },
+			  error: function(xhr) {
+				console.log(xhr);
+			  },
+			  complete:function(){
+
+			
+			  }
+			});
+
+	
+});
+var add_content_marker;
+var pinBuilder = new Cesium.PinBuilder();
+function addPin(id, position) {
+			viewer.entities.remove(add_content_marker);
+			add_content_marker = viewer.entities.add({
+				position: position,
+				billboard: {
+					image: pinBuilder.fromText(id, Cesium.Color.SALMON, 48),
+					verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+					eyeOffset: new Cesium.Cartesian3(0, 0, -1000)
+				}
+			});
+}
+function update_location(click)
+{
+	var ray = viewer.camera.getPickRay(click.position);
+	var cartesian = viewer.scene.globe.pick(ray, viewer.scene);		
+	if(Cesium.defined(cartesian))
+	{
+		var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+		$("#latitude").html(Cesium.Math.toDegrees(cartographic.latitude).toFixed(5)  +"&deg; ");
+		$("#longitude").html(Cesium.Math.toDegrees(cartographic.longitude).toFixed(5) +"&deg; ");
+		$("#addcontent_status").html("");	
+		$("#height").html(cartographic.height.toFixed(3)+ " &#x2133;");
+		viewer.entities.remove(add_content_marker);
+		addPin('?',cartesian);
+	}
+}
+
+/** end of add content */
+var active_tools=[];
+function clear_tools()
+{
+	//alert(active_tools.length);
+    for(var i=0;i<active_tools.length;i++)
+	{
+		active_tools[i].obj.destroy();
+		if(active_tools[i].hasOwnProperty("dialog"))
+            {$(active_tools[i].dialog).dialog("close");}
+		
+	}
+	active_tools=[];
+}
+/*measure distance tool  start */
+var measure_distance=null;
+   $('body').on('click','#distance',function() {
+
+      
+            $( "#distance_dialog" ).dialog({ 
+
+                  position: { my : "left centre" , at: "left centre" ,of: window },
+				  open:function()
+				  {
+					if(!measure_distance)
+					{	
+						 
+						clear_tools();
+						
+						measure_distance=new MeasureDistance(viewer);  
+						active_tools.push({obj:measure_distance,dialog:"#distance_dialog"});
+						
+					}
+				  },
+				  close:function()
+				  {
+					    
+                        $( "#submit_midpoint" ).prop( "disabled", false );
+						measure_distance.destroy();
+						active_tools.pop();
+						measure_distance=null;
+						
+						$("#distance_warning_msg").html("");
+						$("#toal_distance").html("");
+                      
+				  },
+                  buttons: [
+                    {
+                      text: "CLEAR",
+					  class: 'btn btn-default',
+                      click: function() {
+						$( "#submit_distance" ).prop( "disabled", false );
+                        measure_distance.clear();
+						
+						$("#distance_warning_msg").html("");
+						$("#toal_distance").html("");
+                      }
+                    },
+                    {
+                      text: "Measure Distance",
+					  class: 'btn btn-default',
+					  id: "submit_distance",
+                      click: function() {				  
+						
+						  
+                        if (measure_distance.get_count()>=2)
+                        {   
+							$( "#submit_distance" ).prop( "disabled", true );
+							$("#distance_warning_msg").html("");
+							var distance=measure_distance.compute_distance(measure_distance.polyline_positions,true);
+							var label_text;
+							if(distance > 1000)
+							{
+								label_text=(distance/1000).toFixed(3)+" Km";
+							}else
+							{
+								label_text=distance.toFixed(3)+" m";
+							}
+                            $("#toal_distance").html("Total Distance is "+label_text);
+                        } else{
+                            document.getElementById("distance_warning_msg").innerHTML = "<span style='color:red;'>Please choose at least 2 or more points to calculate distance</span>";    
+                           
+                        } 
+                      }
+                    }
+                    
+                  ] , height:'auto',width:'500'
+                });
+        
+		
+	} );   
+
+
+
+/* end of measure distance tool */
+
+
+
+/*measure area tool  start */
+   $('body').on('click','#area',function() {
+
+      
+            $( "#area_dialog" ).dialog({ 
+
+                  position: { my : "left centre" , at: "left centre" ,of: window },
+				  open:function()
+				  {
+					if(!measure_area)  
+					{
+						
+					
+						clear_tools();
+						
+						measure_area=new MeasureArea(viewer);  
+						active_tools.push({obj:measure_area,dialog:"#area_dialog"});
+						
+						$("#total_area").html("");
+					}
+				  },
+				  close:function()
+				  {
+					    $( "#submit_area" ).prop( "disabled", false );
+						measure_area.destroy();
+						active_tools.pop();
+						measure_area=null;
+						$("#total_area").html("");
+						$("#area_warning_msg").html("");
+                     
+				  },
+                  buttons: [
+                    {
+                      text: "CLEAR",
+					  class: 'btn btn-default',
+                      click: function() {
+						$( "#submit_area" ).prop( "disabled", false );
+                        measure_area.clear();
+						$("#total_area").html("");
+						$("#area_locations").html("");
+						$("#area_warning_msg").html("");
+						
+                      }
+                    },
+                     {
+                      text: "Measure Area",
+					  class: 'btn btn-default',
+					  id: "submit_area",
+                      click: function() {
+						  
+						  
+						  
+                        if (measure_area.get_count()>=3)
+                        {   
+							$( "#submit_area" ).prop( "disabled", true );
+							$("#area_warning_msg").html("");
+                            var total_area= measure_area.compute_area();
+							 $("#total_area").html("Total area is "+total_area);
+                              
+                        } else{
+                            document.getElementById("area_warning_msg").innerHTML = "<span style='color:red;'>Please choose at least 3 or more points to calculate area</span>";    
+                           
+                        }
+                      }
+                    } 
+                    
+                  ] , height:'auto',width:'500'
+                });
+        
+		
+	} );   
+
+
+
+/* end of measure area tool */
+
+/** Terrain Profile **/
+$('body').on('change','#sample_dist', function() {
+	$( "#submit_terrain" ).prop( "disabled", false );
+})
+//Terrain Profile
+var dist,i,dist_arr;
+var ellipsoid = viewer.scene.globe.ellipsoid;
+ var latlong_carto;
+    var CLICKED = false;  // Whether user has CLICKED on Choose points before going for Terrain Profile
+    var id_poly = 0;
+    var id_point = 0;
+	var DOWNLOAD_DATA = "";
+	var SAMPLE_DIST;
+	var handler; //make handler global to avoid creating entities at every click even after terrain profile is shown
+	
+var line = 0;	
+var terrainProfile=null;
+var terrainProfileDuplicate=null;
+   $('body').on('click','#TP',function() {
+	
+
+       $( "#terrain_dialog" ).dialog({ 
+
+                  position: { my : "left centre" , at: "left centre" ,of: window },
+				  open:function()
+				  {
+					if(!terrainProfile)  
+					{
+						
+					
+					
+						clear_tools();
+						
+						
+						
+						terrainProfile=new TerrainProfile(viewer);  
+						active_tools.push({obj:terrainProfile,dialog:"#terrain_dialog"});
+						active_tool=terrainProfile;
+						terrainProfileDuplicate=terrainProfile;
+						active_tool_id="#terrain_dialog";
+						document.getElementById("sample_dist").value=10;
+						
+					}
+					
+				  },
+				  close:function()
+				  {
+					    $( "#submit_terrain" ).prop( "disabled", false );
+						terrainProfile.destroy();
+						active_tools.pop();
+						terrainProfile=null;	
+						if($("#terrainprofile").hasClass("ui-dialog-content") && $('#terrainprofile').dialog('isOpen'))
+						 {
+							 $('#terrainprofile').dialog('close');
+						 }						
+						$("#terrain_warning_msg").html("");
+                        
+				  },
+                  buttons: [
+                    {
+                      text: "CLEAR",
+					  class: 'btn btn-default',
+                      click: function() {
+						$( "#submit_terrain" ).prop( "disabled", false );
+                        terrainProfile.clear();
+						
+						$("#terrain_warning_msg").html("");
+						
+                      }
+                    },
+                     {
+                      text: "Show Terrain Profile",
+					  class: 'btn btn-default',
+					  id: "submit_terrain",
+                      click: function() {
+						 $("#terrain_warning_msg").html("");
+						var SAMPLE_DIST = Number(document.getElementById("sample_dist").value);
+						if(SAMPLE_DIST<(terrainProfile.compute_distance(terrainProfile.polyline_positions,true)/5000)){  //new
+							document.getElementById("terrain_warning_msg").innerHTML = "The total distance is too large for this sampling distance. You can either select smaller path or choose lesser sampling distance.";
+						}else if (terrainProfile.get_count()>=2)
+                        {   
+							
+							$( "#submit_terrain" ).prop( "disabled", true );
+							
+							 if($("#terrainprofile").hasClass("ui-dialog-content") && $('#terrainprofile').dialog('isOpen'))
+							 {
+								 $('#terrainprofile').dialog('close');
+							 }
+							 $( "#terrainprofile" ).dialog({
+								  position: { my : "left centre" , at: "left centre" ,of: window },
+								  open:function()
+								  {
+									  
+									
+									  terrainProfileDuplicate.show_profile(terrainProfileDuplicate.polyline_positions,SAMPLE_DIST);
+								  },
+								  close: function () 
+								  {
+									
+								  },	
+								  buttons: [
+									{
+									  text: "Download data as text file",
+									  class: 'btn btn-default',
+									  click: function()	{
+										terrainProfileDuplicate.download("Terrain_Profile.txt",terrainProfileDuplicate.download_data);
+									  }
+									}
+								  ] , height:'auto',width:'auto'
+								});
+                              
+                        } else{
+                            document.getElementById("terrain_warning_msg").innerHTML = "<span style='color:red;'>Please choose at least 2 or more points to see Terrain Profile</span>";    
+                           
+                        }
+                      }
+                    } 
+                    
+                  ] , height:'auto',width:'500'
+                });
+	} );   	
+
+	/** End of terrain profile   */
+
+
+$('body').on('click','#add_layer',function() {	
+	document.getElementById('clrpicker').style.display='none';	
+	document.getElementById('layers').innerHTML="<a id='IMGLayer' href='#' onclick='userimagelayer()'><b>Raster Layer</b></a><br><a id='KMLLayer' href='#' onclick='userkmllayer()'><b>KML</b></a><br><a id='Shapefile' href='#' onclick='shapefile()'><b>Shapefile</b></a> <br><a id='WMSLayer' href='#' onclick='userwmslayer()'><b>WMSLayer</b></a>";   
+	var userdbox = $("#addlayers").dialog({
+				autoOpen: false,
+				resizable: false,
+				width: 500,
+				close: function () {}				
+		});
+	userdbox.dialog("open");
+	
+	
+/* 	var mylayersbox = $("#mylayers").dialog({
+				autoOpen: false,
+				position: { my : "left centre" , at: "left centre" ,of: window },
+				resizable: false,
+				width: 350,
+				close: function () {}				
+		});
+	mylayersbox.dialog("open"); */
+	
+});
+
+ function userwmslayer()
+ {	
+document.getElementById("layers").innerHTML='<b>WMS URL</b>&nbsp&nbsp&nbsp&nbsp&nbsp<input id="wmsurl" type="Text"><br><i>eg: https://bhuvan-ras2.nrsc.gov.in/cgi-bin/hazard.exe</i><br><b>Layername</b>&nbsp&nbsp<input id="wmslayer" type="Text"><br><i>eg:as_hz</i><br><a style="cursor:pointer" onclick="back()"><img src="img/MoveIcon.gif" >back</a><input type="button" value="Load" onclick="load_extwms()" style="float:right;color:blue;">';
+  
+ }
+ function back()
+ {
+    
+	document.getElementById('clrpicker').style.display='none';
+	document.getElementById('layers').innerHTML="<a id='IMGLayer' href='#' onclick='userimagelayer()'><b>Raster Layer</b></a><br><a id='KMLLayer' href='#' onclick='userkmllayer()'><b>KML</b></a><br><a id='Shapefile' href='#' onclick='shapefile()'><b>Shapefile</b></a> <br><a id='WMSLayer' href='#' onclick='userwmslayer()'><b>WMSLayer</b></a>"; //25-06-2014 - raster
+ }
+ /*raster layer */
+ 
+ function stopUpload_raster(success){
+			var temp = new Array();
+			temp = success.split(':');			
+            success=temp[0];  			
+			if(temp[0]=="Error"){			
+				switch(temp[1]){
+					case 'tif'	:   alert("File is not valid .TIFF file");
+									break;
+					case 'tfw'	:	alert("File is not valid .TFW file");
+									break;
+					case 'Unsuccess':alert("Error while uploading.Please try again");
+								     break;
+					case 'upload':   alert("Error while uploading.Please try again");
+								     break;
+					case 'size'  :	alert("Upload zipfile of exceeds maximum size (6MB)");
+						             break;
+					case 'default':alert("Zip files are only allowed for Upload");
+				}
+				
+			}
+			else{	
+			
+                         				
+				var layername="imagefile:"+temp[0]; //workspace:	
+				add_to_mylayers(layername);
+				add_layer_np(layername,'https://bhuvan-app1.nrsc.gov.in/gp1wms/imagefile/wms');
+				
+		
+			}
+			
+			document.getElementById('zip_upload_process').style.visibility = 'hidden';
+			document.getElementById('zip_upload_form').style.display = 'block';
+			//$("#addlayers").dialog("close");	
+			document.getElementById('clrpicker').style.display='none';
+			back();
+}
+
+ 
+ 
+ function userimagelayer()
+{
+document.getElementById("layers").innerHTML=
+"<form action='usertasks/userlayers/upload_raster.php' method='post' enctype='multipart/form-data' target='upload_target' onsubmit='startUpload(\"zip\")' ><b>Load Zip file</b><p id='zip_upload_process'>Loading...<br/><img src='img/loader.gif' /><br/></p><p id='zip_upload_form'><label><b> Raster File:</b><input name='upload' id='upload' type='file'  onchange='checkfilexttension(this,\"zip\")' /><br> </label> <label><a style='cursor:pointer;'onclick='back()'><img src='img/MoveIcon.gif' >back</a><input type='submit' name='submitBtn'  id='zipfile' value='Upload' disabled='disabled' style='float:right;'/> </label><br><span id='ziperror'></span></p><br><iframe id='upload_target' name='upload_target' src='#' style='width:0;height:0;border:0px solid #fff;'></iframe></form>";
+}
+
+
+/* end of raster layer */
+
+/* kml layer */
+
+function show_or_hide_datasource()
+{
+	
+		for (var i=0;i<layers.length;i++)
+	{
+		if(layers.get(i).imageryProvider.layers==name)
+		{
+			layers.get(i).show=show;
+
+		}
+	}
+	
+}
+
+function loaduserkml(name,layerurl){				
+															
+
+
+
+   viewer.dataSources.add(
+        Cesium.KmlDataSource.load(layerurl, {
+            camera: viewer.camera,
+            canvas: viewer.canvas
+        }))
+
+        //Use Promise to Handle Callbacks
+        .then(
+            function (kmlData) { //success
+                viewer.flyTo(kmlData.entities);
+				//var datasources=viewer.dataSources;
+				add_to_my_kmllayers(kmlData.name);
+            },
+            function (error) { //failure
+                alert( error + ': Bad or null KML.');
+                // failure is often a result of CORS Security Policies
+                // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+            }
+        );	
+}
+function stopUploadkml(response)
+{
+	console.log(response);
+	response = response.split('::');
+	if(response[0]=='Error')
+	{
+	
+		
+		alert(response[1]);	
+	}				   
+	else	
+	  loaduserkml(response[1],'/userkmlfiles/'+response[1]);
+  
+	//$("#addlayers").dialog("close");		
+	document.getElementById('kml_upload_process').style.visibility = 'hidden';
+	document.getElementById('kml_upload_form').style.display = 'block';
+	back();
+}
+function userkmllayer()
+{ 
+ document.getElementById("layers").innerHTML=
+"<form action='usertasks/userlayers/uploadkml.php' method='post' enctype='multipart/form-data' target='upload_target_kml' onsubmit='startUpload(\"kml\")' >	<b>Load KML File</b><p id='kml_upload_process'>Loading...<br/><img src='img/loader.gif' /><br/></p><p id='kml_upload_form'><label><b> KML File:</b><input name='file' id='upload' type='file'  onchange='checkfilexttension(this,\"kml\")' /><br> </label> <label><a style='cursor:pointer;'onclick='back()'><img src='img/MoveIcon.gif' >back</a><input type='submit' name='submitBtn'  id='kmlfile' value='Upload' disabled='disabled' style='float:right;'/> </label><br><span id='kmlerror'></span></p><br><iframe id='upload_target_kml' name='upload_target_kml' src='#' style='width:0;height:0;border:0px solid #fff;'></iframe></form>";
+}
+
+
+/* end of kml layer */
+
+/*shape file */
+function stopUpload(success){
+			var temp = new Array();
+			temp = success.split(':');			
+            success=temp[0];  			
+			if(temp[0]=="Error"){			
+				switch(temp[1]){
+					case 'shp'	:   alert("Not able to find shp file.No SubFolders are allowed in Zipfile.");
+									break;
+					case 'prj'	:	alert("Not able to find prj file");
+									break;
+					case 'dbf'	:   alert("Not able to find dbf file");
+								    break;
+					case 'shx'	:	alert("Not able to find shx file");
+								    break;
+					case 'Unsuccess':alert("Error while uploading.Please try again");
+								     break;
+					case 'upload':   alert("Error while uploading.Zipfile should contain .shp,.shx,.prj,.dbf only");
+								     break;
+					case 'size'  :	alert("Upload zipfile of maximum 2MB.");
+						             break;
+					case 'default':alert("Zip files are only allowed for Upload");
+				}
+				
+			}
+			else{	
+
+                var color=document.getElementById('clr').value;               				
+				var layername="shapefile:"+success; //workspace:				
+
+				add_to_mylayers(layername);
+				add_layer_np(layername,'https://bhuvan-app1.nrsc.gov.in/gp1wms/shapefile/wms');			
+			}
+			//$("#addlayers").dialog("close");	
+			document.getElementById('clrpicker').style.display='none';
+			document.getElementById('zip_upload_process').style.visibility = 'hidden';
+			document.getElementById('zip_upload_form').style.display = 'block';
+			back();
+						
+}
+
+function shapefile()
+{
+
+document.getElementById("clrpicker").style.display='inline';
+document.getElementById("layers").innerHTML=
+"<form action='usertasks/userlayers/upload.php' method='post' enctype='multipart/form-data' target='upload_target' onsubmit='startUpload(\"zip\")' ><b>Load Zip file(.shp,.prj,.dbf .shx)</b><p id='zip_upload_process'>Loading...<br/><img src='img/loader.gif' /><br/></p><p id='zip_upload_form'><label><b> Shape File:</b><input name='upload'id='upload' type='file'  onchange='checkfilexttension(this,\"zip\")' /><br> </label> <label><a style='cursor:pointer;'onclick='back()'><img src='img/MoveIcon.gif' >back</a><input type='submit' name='submitBtn'  id='zipfile' value='Upload' disabled='disabled' style='float:right;'/> </label><br><span id='ziperror'></span></p><br><iframe id='upload_target' name='upload_target' src='#' style='width:0;height:0;border:0px solid #fff;'></iframe></form>";
+}
+
+/*end of shape file */
+
+
+
+
+function checkfilexttension(fname,type) { 
+ 
+		   var fname = fname.value;
+		   fname=fname.toLowerCase();
+		   var index=fname.lastIndexOf(type);		
+		  if(index!=-1) 
+		  {	  
+			document.getElementById(type+'file').disabled = false;	
+			document.getElementById(type+'error').innerHTML='';			
+		  }
+		  else {		   
+			fname.value = '';
+			document.getElementById(type+'file').disabled = true;	
+			alert('Error:Unsupported file format is loaded,load the'+type+'file');
+			document.getElementById(type+'_upload_process').style.visibility = 'hidden';
+			document.getElementById(type+'_upload_form').style.display = 'block';
+			document.getElementById(type+'error').innerHTML='Error:Unsupported file format is loaded,load the'+type+'file';			
+		  }
+}
+ 
+
+function startUpload(type){
+
+document.getElementById(type+'_upload_process').style.visibility = 'visible';
+document.getElementById(type+'_upload_form').style.display='none';
+}
+
+function load_extwms()
+ {
+      var url  = document.getElementById("wmsurl").value;
+	  var name = document.getElementById("wmslayer").value;	
+	  if(url==""||name=="")
+	  {
+	    alert('Please enter the url and layer name');
+	  }
+	  else{ 
+				add_to_mylayers(name);
+				add_layer(name,url);
+				////$("#addlayers").dialog("close");
+				back();
+		}	  
+	
+ }
+
+
+
+
+
+
+
+
+
+
+/* start of snap shot tool */
+
+
+
+
+$('body').on('click','#snap',function() {
+
+	var canvas=viewer.canvas;
+	var text="BHUVAN ,  NRSC/ISRO";
+	var tempCanvas=document.createElement('canvas');
+	var tempCtx=tempCanvas.getContext('2d');
+	var cw,ch;
+	cw=tempCanvas.width=canvas.width;
+	ch=tempCanvas.height=canvas.height;
+	tempCtx.drawImage(canvas,0,0);
+	tempCtx.font="24px verdana";
+	var textWidth=tempCtx.measureText(text).width;
+	tempCtx.globalAlpha=.50;
+	tempCtx.fillStyle='white'
+	tempCtx.fillText(text,cw-textWidth-10,ch-20);
+	tempCtx.fillStyle='black'
+	tempCtx.fillText(text,cw-textWidth-10+2,ch-20+2);
+  
+  
+  tempCanvas.toBlob(function(blob){
+			
+			
+			
+			var link = document.createElement('a');
+			link.href = URL.createObjectURL(blob);
+			link.download =  "bhuvan.png";
+			link.dispatchEvent(new MouseEvent('click'));
+			
+    });
+	
+	
+});
+
+/* end of snap shot tool */
+
+function update_user_kmllayers(checkbox,layername)
+{
+	if(checkbox.checked)
+	{
+		console.log('show'+layername);
+		show_or_hide_kmllayer(layername,true);
+		
+		
+	}else
+	{
+		console.log('hide'+layername);
+		show_or_hide_kmllayer(layername,false);
+	}
+	
+}
+function update_user_layers(checkbox,layername)
+{
+	if(checkbox.checked)
+	{
+		console.log('show'+layername);
+		show_or_hide_layer(layername,true);
+		
+		
+	}else
+	{
+		console.log('hide'+layername);
+		show_or_hide_layer(layername,false);
+	}
+	
+}
+
+function add_to_my_kmllayers(layername)
+{
+	
+	
+	var table = document.getElementById("layers_list");
+	
+	var row="<tr>" +
+				"<th>" +
+					"<input type='checkbox' name='"+layername+"'  id='"+layername+"' value='"+layername+"' onclick=\"update_user_kmllayers(this,'"+layername+"')\"  checked />" +
+				"</th>" +
+				"<td>"+ layername +"</td>"+				
+	
+			"</tr>";
+
+	table.innerHTML+=row;
+	
+}
+
+function add_to_mylayers(layername)
+{
+	
+	
+	var table = document.getElementById("layers_list");
+	
+	var row="<tr>" +
+				"<th>" +
+					"<input type='checkbox' name='"+layername+"'  id='"+layername+"' value='"+layername+"' onclick=\"update_user_layers(this,'"+layername+"')\"  checked />" +
+				"</th>" +
+				"<td>"+ layername +"</td>"+				
+	
+			"</tr>";
+
+	table.innerHTML+=row;
+	
+}
+function show_or_hide_kmllayer(name,show)
+{
+	var datasources=viewer.dataSources;
+	for (var i=0;i<datasources.length;i++)
+	{
+		var temp=datasources.get(i);
+		if(temp.name==name)
+		{
+			temp.show=show;
+
+		}
+	}
+
+}
+
+function show_or_hide_layer(name,show)
+{
+	for (var i=0;i<layers.length;i++)
+	{
+		var temp=layers.get(i);
+		if(temp.imageryProvider.layers==name)
+		{
+			temp.show=show;
+
+		}
+	}
+
+}
+
+function remove_layer(name)
+{
+	for (var i=0;i<layers.length;i++)
+	{
+		if(layers.get(i).imageryProvider.layers==name)
+		{
+			layers.remove(layers.get(i), true);
+
+		}
+	}
+
+}
+
+
+function add_layer(layername,url)
+{
+	var temp_layer= new Cesium.WebMapServiceImageryProvider({
+			url : url,      
+			parameters: { 
+							format:'image/png', 
+							transparent:'true'
+						},				
+			layers: layername,
+			tilingScheme:new Cesium.GeographicTilingScheme(),
+			proxy : new Cesium.DefaultProxy('proxy.php?url=')
+		});
+	layers.addImageryProvider(temp_layer);
+}
+
+// for no proxy layers
+function add_layer_np(layername,url)
+{
+	var temp_layer= new Cesium.WebMapServiceImageryProvider({
+			url : url,      
+			parameters: { 
+							format:'image/png', 
+							transparent:'true'
+						},				
+			layers: layername,
+			tilingScheme:new Cesium.GeographicTilingScheme()			
+		});
+	layers.addImageryProvider(temp_layer);
+}
+
+var modelbox=null;
+$('body').on('click','#models',function() {
+if(modelbox==null)
+{
+modelbox = $("#modeldiv").dialog({
+				autoOpen: false,
+				position: { my : "left centre" , at: "left centre" ,of: window },
+				resizable: false,
+				width: 450,
+				close: function () {}
+							
+		});
+modelbox.load("get/model.php",function(response,status){
+      if (status=="success")
+      {
+	 
+	  $('#modelopt').change(function(){
+if(this.value=="" || this.value=="Select")
+{
+$("#modeldesc").html("");
+return;
+}
+loadmodel(this.value,true);
+  
+});	
+
+
+ $('#citymodelopt').change(function(){
+if(this.value=="" || this.value=="Select")
+{
+$("#modeldesc").html("");
+return;
+}
+modelbnglr(this.value,true);
+  
+});	
+
+
+
+$('body').on('click','#modelremoveall',function() {
+ scene.primitives.removeAll();// Remove previous all models
+ $("#modeldesc").html("");
+});	
+
+}});
+}
+modelbox.dialog("open");	
+});	
+
+$('.cesium-viewer-bottom ').attr('style', 'left:0');
+
+
+
+function modelbnglr(value) {
+
+var t=value.split("#");
+var cityname=t[0];
+scene.primitives.removeAll();
+var htm="";
+var mnum=0;
+$("#modelopt option").each(function()
+{
+var str=$(this).text();
+var txt=$(this).val();
+
+    if (str.toLowerCase().indexOf(cityname.toLowerCase()) >= 0) 
+	{
+	var val = ($(this).val()).split("_#_");
+	
+	if(val[7]==1) //Only onload models will be loaded
+	{
+	loadmodel($(this).val(),false);
+	htm=htm+"<span id='modelfind"+mnum+"' style='cursor:pointer;color:blue'>" +str.replace(","+cityname,"")+"</span><span id='modelfindtry"+mnum+"'  style='display:none'   >"+$(this).val()+"</span><br/>"; }
+	else
+	htm=htm+"<span id='modelfind"+mnum+"' style='cursor:pointer'   onclick=\"this.style.color='blue';\">" +str.replace(","+cityname,"")+"</span><span id='modelfindtry"+mnum+"'  style='display:none'   >"+$(this).val()+"</span><br/>";
+	mnum=mnum+1;
+	}
+});
+zoom_in(parseFloat(t[1]), parseFloat(t[2]), parseInt(t[3]));
+
+
+if(htm!="")
+{
+$("#modeldesc").html("<span id='modelsearchnum' style='display:none'>"+mnum+"</span><u>Following 3D Models are available </u><br/>"+htm);
+
+var num=parseInt($("#modelsearchnum").html());
+for(var i=0;i<num;i++)
+{
+
+$('body').on('click','#modelfind'+i,function() { 
+var id=this.id.substring(9);
+
+var temp = $("#modelfindtry"+id).html().split("_#_");
+if(temp[7]==0) //No onload models will be loaded now
+loadmodel($("#modelfindtry"+id).html(),false);
+
+zoom_in(parseFloat(temp[1]),parseFloat(temp[0]),parseInt(temp[6])+200)});
+}
+}
+
+}
+		
+function loadmodel(values,flag)
+{
+
+  var val = values.split("_#_");
+	  var th=parseFloat(val[6])+100;
+if(flag)
+{
+zoom_in(parseFloat(val[1]),parseFloat(val[0]),th);
+$("#modeldesc").html(val[4]);
+}
+
+var  height = Cesium.defaultValue(  parseFloat(val[6]), 0.0);
+
+
+var pointOfInterest = Cesium.Cartographic.fromDegrees(
+   val[1],val[0], 5000, new Cesium.Cartographic());
+
+// Sample the terrain (async) and write the answer to the console.
+Cesium.sampleTerrain(viewer.terrainProvider, 9, [ pointOfInterest ])
+.then(function(samples) {
+   
+	var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(parseFloat(val[1]),parseFloat(val[0]),samples[0].height));
+ 	 //scene.primitives.removeAll(); 
+	var model = scene.primitives.add(Cesium.Model.fromGltf({
+	url : 'models/'+val[2]+'.gltf',
+    modelMatrix : modelMatrix,
+    scale : parseFloat(val[5])
+ 
+}));
+});
+
+}		
+
+
+function load_video(name,video,tit,w,h) {
+
+    $(function() {
+        $(name).dialog({
+	        width:w,
+	        height:h,
+			autoOpen: false,
+			position: { my : "centre"  ,of: window },
+			resizable: false,
+			close: function () {},
+			zIndex: 3000,
+	        title: tit
+		  });
+          $(name).load(video.replace(/ /g,"%20")).dialog('open');
+           
+    });
+}
+
+//login
+
+ $('body').on('click','#alogout',function() {
+		load_video('#LogoutFrame','loading.php?q=logout.php','Logout','730','730');
+		
+		setTimeout(function(){reloadlogin_afterlogout();},1000);
+});
+$('body').on('click','#alogin',function() {
+		load_video('#LoginFrame','loading.php?q=login.php','Login','900','730');
+		
+});	
+
+
+
+
+
+
+
+
+
+
+
+
+//3d Buildings start	
+    var dataSource1 = new Cesium.CzmlDataSource();      //level1
+    var dataSource2 = new Cesium.CzmlDataSource();      //level2
+    var dataSource3 = new Cesium.CzmlDataSource();      //level3
+    var rectangleMumbai = Cesium.Rectangle.fromDegrees(72.7835,18.9051, 73.0003,19.3175);
+    var rectangleDelhi = Cesium.Rectangle.fromDegrees(77.0361,28.2654, 77.3456,28.7681);
+    var rectangleBangalore = Cesium.Rectangle.fromDegrees(77.6373,12.8235,  77.6924,12.8753);
+    var rectangleGurgaon = Cesium.Rectangle.fromDegrees( 76.984,28.3816, 77.1151,28.4649);
+    var rectanglePune = Cesium.Rectangle.fromDegrees(73.7498,18.4327, 74,18.6256);
+    var rectangleKolkata = Cesium.Rectangle.fromDegrees(88.3948,22.5511, 88.4368,22.6065);
+    var rectangleHyderabad = Cesium.Rectangle.fromDegrees(78.3425,17.4141, 78.4514,17.525);
+    var ext_1;  //extent of models
+    var rect_str = "";
+    viewer.camera.moveEnd.addEventListener(function() {
+
+        var camera_pos = viewer.camera.positionCartographic;
+        
+        if (camera_pos.height <= 5000){
+
+            var windowPosition = new Cesium.Cartesian2.fromArray([viewer.container.clientWidth / 2, viewer.container.clientHeight / 2]);
+            var pickRay = viewer.scene.camera.getPickRay(windowPosition);
+            var cartesian = viewer.scene.globe.pick(pickRay, viewer.scene);
+            if(cartesian){
+                var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+                
+                if(Cesium.Rectangle.contains(rectangleMumbai,cartographic) || Cesium.Rectangle.contains(rectangleDelhi,cartographic) || Cesium.Rectangle.contains(rectangleBangalore,cartographic) || Cesium.Rectangle.contains(rectangleGurgaon,cartographic) || Cesium.Rectangle.contains(rectanglePune,cartographic) || Cesium.Rectangle.contains(rectangleKolkata,cartographic) || Cesium.Rectangle.contains(rectangleHyderabad,cartographic)){        
+                    
+                    cam_lon = Cesium.Math.toDegrees(cartographic.longitude);
+                    cam_lat = Cesium.Math.toDegrees(cartographic.latitude);
+                    dist_cam = Cesium.Cartesian3.distance(Cesium.Cartesian3.fromRadians(camera_pos.longitude,camera_pos.latitude,camera_pos.height), cartesian);
+                    
+                    if(!ext_1 || !Cesium.Rectangle.contains(ext_1,cartographic)){
+                        remove_level_1();
+                        remove_level_2();
+                        remove_level_3();
+                        viewer.entities.removeById("extent");
+                        testExtent_1 = viewer.camera.computeViewRectangle(viewer.scene.globe.ellipsoid);
+                        testExtent_2 = Cesium.Rectangle.fromDegrees(cam_lon-0.006, cam_lat-0.006, cam_lon+0.006, cam_lat+0.006);         // Expected models size to be < 300KB based on this extent
+                        
+                        //testExtent_2 = Cesium.Rectangle.fromDegrees(cam_lon-0.004, cam_lat-0.004, cam_lon+0.004, cam_lat+0.004);          // Initial smaller extent withholding models with size < 100KB
+                        
+                        
+                        if(dist_cam <= 1000 && Cesium.Rectangle.computeHeight(testExtent_1) < Cesium.Rectangle.computeHeight(testExtent_2) && Cesium.Rectangle.computeWidth(testExtent_1) < Cesium.Rectangle.computeWidth(testExtent_2)){
+                  
+                            ext_1 = testExtent_1;
+                        }
+                        else{
+                            ext_1 = testExtent_2;
+                        }                        
+                        rect_str = "" + (Cesium.Math.toDegrees(ext_1.west)) + " " + (Cesium.Math.toDegrees(ext_1.north)) + "," + (Cesium.Math.toDegrees(ext_1.east)) + " " + (Cesium.Math.toDegrees(ext_1.north)) + "," + (Cesium.Math.toDegrees(ext_1.east)) + " " + (Cesium.Math.toDegrees(ext_1.south)) + "," +(Cesium.Math.toDegrees(ext_1.west)) + " " + (Cesium.Math.toDegrees(ext_1.south)) + "," + (Cesium.Math.toDegrees(ext_1.west)) + " " + (Cesium.Math.toDegrees(ext_1.north));    
+                    }
+
+                
+                    if(dist_cam > 2000){
+                        if(!dataSource1._name){
+                            create_level_1();
+                        }
+                        if(dataSource1._name && !Cesium.Rectangle.contains(ext_1,cartographic)){   
+                            remove_level_1();
+                            create_level_1();
+                        }
+                        if(dataSource2._name){
+                            remove_level_2();
+                        }
+                        if(dataSource3._name){
+                            remove_level_3();                   
+                        }
+                    }
+                    
+                    if(dist_cam <= 2000 && dist_cam > 1000){
+                        if(!dataSource1._name){
+                            create_level_1();
+                        }
+                        if(!dataSource2._name){
+                            create_level_2();
+                        }
+                        if(dataSource1._name && !Cesium.Rectangle.contains(ext_1,cartographic)){
+                            remove_level_1();
+                            create_level_1();
+                        }
+                        if(dataSource2._name && !Cesium.Rectangle.contains(ext_1,cartographic)){
+                            remove_level_2();
+                            create_level_2();
+                        }
+                        if(dataSource3._name){
+                            remove_level_3();
+                        }
+                    }
+                    
+                    if(dist_cam <= 1000){
+                        if(!dataSource1._name){
+                            create_level_1();
+                        }
+                        else if(dataSource1._name && !Cesium.Rectangle.contains(ext_1,cartographic)){
+                            remove_level_1();
+                            create_level_1();
+                        }
+                        if(!dataSource2._name){
+                            create_level_2();
+                        }
+                        else if(dataSource2._name && !Cesium.Rectangle.contains(ext_1,cartographic)){
+                            remove_level_2();
+                            create_level_2();
+                        }
+                        if(!dataSource3._name){
+                            create_level_3();
+                        }
+                        else if(dataSource3._name && !Cesium.Rectangle.contains(ext_1,cartographic)){
+                            remove_level_3();
+                            create_level_3();
+                        }
+                    } 
+                }
+            }
+        }
+        
+        else if (camera_pos.height > 5000){
+            if(dataSource1._name){
+                remove_level_1();
+            }
+            if(dataSource2._name){
+                remove_level_2();
+            }
+            if(dataSource3._name){
+                remove_level_3();
+            }
+            viewer.entities.removeById("extent");
+        }
+
+    });
+    
+ 
+///////////////////////////////////////////////////////////////////////////////   
+    
+    function create_level_1(){
+        var models_class = "1"+"@"+rect_str;
+        var xhttp;
+        if (window.XMLHttpRequest) {
+
+            xhttp = new XMLHttpRequest();
+        } else {
+
+            xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+            
+        //xhttp.open("POST", "../write_czml_building_cities_3d_v2_5.php", true);
+        xhttp.open("POST", "get/models_building.php", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function () { 
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var models = xhttp.responseText;
+
+                if (models){
+                    models = models + '';
+
+                    try {
+                        models = JSON.parse(models.replace(/\\/g,"").slice(1,-1));
+                        dataSource1._name = "czml_1";
+                        dataSource1.load(models);
+                        viewer.dataSources.add(dataSource1);
+                        models = null;
+                        console.log("Added level 1");                        
+                    }
+                    catch(err){
+                        models = null;
+                    }
+                }
+            }
+        }
+        var class_json = JSON.stringify(models_class);    
+        xhttp.send(class_json);
+    }
+/////////////////////////////////////////////////////////////////////////////////////    
+    
+    function create_level_2(){
+        var models_class = "2"+"@"+rect_str;
+        
+        var xhttp;
+        if (window.XMLHttpRequest) {
+
+            xhttp = new XMLHttpRequest();
+        } else {
+
+            xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+            
+        //xhttp.open("POST", "../write_czml_building_cities_3d_v2_5.php", true);
+        xhttp.open("POST", "get/models_building.php", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function () { 
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var models = xhttp.responseText;
+
+                if (models){
+                    models = models + '';
+                    try {
+                        models = JSON.parse(models.replace(/\\/g,"").slice(1,-1));
+
+                        dataSource2._name = "czml_2";
+                        dataSource2.load(models);
+                        viewer.dataSources.add(dataSource2);
+
+                        models = null;
+                        console.log("Added level 2");
+                    }
+                    catch(err){
+                        models = null;
+                    }
+                }
+            }
+        }
+        var class_json = JSON.stringify(models_class);    
+        xhttp.send(class_json);
+    }
+ ////////////////////////////////////////////////////////////////////////////////////   
+    function create_level_3(){
+        var models_class = "3"+"@"+rect_str;
+        var xhttp;
+        if (window.XMLHttpRequest) {
+
+            xhttp = new XMLHttpRequest();
+        } else {
+
+            xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+           
+        //xhttp.open("POST", "../write_czml_building_cities_3d_v2_5.php", true);
+        xhttp.open("POST", "get/models_building.php", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function () { 
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var models = xhttp.responseText;
+
+                if (models){
+                    models = models + '';
+                    try { 
+                        models = JSON.parse(models.replace(/\\/g,"").slice(1,-1));
+                        dataSource3._name = "czml_3";
+                        dataSource3.load(models);
+                        viewer.dataSources.add(dataSource3);
+                        models = null;
+                        console.log("Added level 3");
+                    }
+                    catch(err){
+                        models = null;
+                    }
+                }
+            }
+        } 
+        var class_json = JSON.stringify(models_class);    
+        xhttp.send(class_json);
+    }
+/////////////////////////////////////////////////////////////////////////////////////    
+    function remove_level_1(){
+        if(dataSource1._visualizers){
+            viewer.dataSources.remove(dataSource1);
+            dataSource1._name = undefined;
+            //console.log("Removed level 1");
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////   
+    function remove_level_2(){
+        if(dataSource2._visualizers){
+            viewer.dataSources.remove(dataSource2);
+            dataSource2._name = undefined;
+            //console.log("Removed level 2");
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////    
+    function remove_level_3(){
+        if(dataSource3._visualizers){
+            viewer.dataSources.remove(dataSource3);
+            dataSource3._name = undefined;
+            //console.log("Removed level 3");
+        }
+    }
+
+
+function reloadlogin_afterlogout() {
+		
+		document.getElementById("loggedindiv").innerHTML = "<b>  &nbsp;&nbsp; </b>";
+		document.getElementById("alogout").style.display = 'none';
+		
+		$('#bhuvan_banner ').load(document.URL +  ' #bhuvan_banner');
+		document.getElementById("alogin").style.display = 'inline';
+		$("#LogoutFrame").dialog("close");
+			
+	}
+
+
+function reloadlogin() {
+		
+		document.getElementById("alogout").style.display = 'inline';
+		
+		$('#bhuvan_banner').load(document.URL +  ' #bhuvan_banner');
+		document.getElementById("alogin").style.display = 'none';
+		$("#LoginFrame").dialog("close");
+				
+	}

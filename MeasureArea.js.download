@@ -1,0 +1,216 @@
+var MeasureArea = (function() {
+
+	
+	function _(viewer)
+	{
+		this.viewer=viewer;
+		viewer.scene.globe.depthTestAgainstTerrain = false;
+		this.handler=new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+		this.polygon_positions=[];
+		this.polygon=null;
+		this.billboards = viewer.scene.primitives.add(new Cesium.BillboardCollection());
+		this.geometry_drawn=false;
+		this.label_position = viewer.entities.add({
+						label : {
+							show : false,
+							showBackground : true,
+							font : '14px monospace',
+							fillColor : Cesium.Color.WHITE,
+							outlineColor : Cesium.Color.BLACK,
+							outlineWidth : 4,
+							 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+							horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+							verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+							pixelOffset : new Cesium.Cartesian2(5, 0)
+						}
+					});
+		this.handler.setInputAction(function (click) {
+
+			if(this.geometry_drawn)
+			{
+				this.clear();
+				$( "#submit_area" ).prop( "disabled", false );
+				$("#total_area").html("");
+				this.geometry_drawn=false;
+			}
+			var ray = this.viewer.camera.getPickRay(click.position);
+				var position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+				if(Cesium.defined(position))
+				{
+					var cartographic = Cesium.Cartographic.fromCartesian(position);
+					
+				}
+				this.polygon_positions.push(position);
+				this.billboards.add({
+					show : true,
+					position : position,
+					pixelOffset : new Cesium.Cartesian2(0.0, 0.0),
+					eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
+					horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
+					verticalOrigin : Cesium.VerticalOrigin.CENTER,
+					scale : 1.0,
+					image:"./img/dragIcon.png",
+					color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
+				});
+				if(this.polygon_positions.length>2)
+				{
+					if(this.polygon)
+						this.viewer.entities.remove(this.polygon);
+					this.polygon=viewer.entities.add({
+													name : 'Blue polygon with holes and outline',
+													polygon : {
+														hierarchy : {
+															positions : this.polygon_positions
+														},
+														material : Cesium.Color.BLUE.withAlpha(0.5),
+														outline : true,
+														outlineColor : Cesium.Color.YELLOW
+													}
+												});
+				}
+		}.bind(this),Cesium.ScreenSpaceEventType.LEFT_CLICK);
+		
+	/* 	this.handler.setInputAction(function (click) {
+
+			this.compute_area();
+			
+		}.bind(this),Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK); */
+		
+		this.handler.setInputAction(function (movement) {
+			
+			var pickedObject = viewer.scene.pick(movement.endPosition);
+			if(Cesium.defined(pickedObject) && Cesium.defined(pickedObject.primitive) )
+			{
+				if(pickedObject.primitive instanceof Cesium.Billboard)
+				{
+					
+					 var cartesian=pickedObject.primitive.position;
+					if (cartesian) {
+						var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+						var longitudeString = Cesium.Math.toDegrees(cartographic.longitude).toFixed(2);
+						var latitudeString = Cesium.Math.toDegrees(cartographic.latitude).toFixed(2);
+						
+						this.label_position.position = cartesian;
+						this.label_position.label.show = true;
+						this.label_position.label.text ='Lon: ' + ('   ' + longitudeString).slice(-7) + '\u00B0' +'\nLat: ' + ('   ' + latitudeString).slice(-7) + '\u00B0';
+					} else {
+						this.label_position.label.show = false;
+					}
+				}else
+				{
+					this.label_position.label.show = false;
+				}
+			}else
+			{
+				this.label_position.label.show = false;
+			}
+			
+        
+
+		}.bind(this),Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+		
+	
+	}
+	_.prototype.compute_area=function()
+	{
+		var viewer=this.viewer;
+		
+		
+		this.geometry_drawn=true;
+		var bluePolygon=this.polygon;
+		viewer.zoomTo(viewer.entities);
+		
+		var hierarchy = bluePolygon._polygon._hierarchy._value;
+
+	// "indices" here defines an array, elements of which defines the indice of a vector
+	// defining one corner of a triangle. Add up the areas of those triangles to get
+	// an approximate area for the polygon
+		try{
+			
+			var indices = Cesium.PolygonPipeline.triangulate(hierarchy.positions, hierarchy.holes);
+		}catch(e)
+		{
+			console.log("error"+e);
+		}
+		var area = 0; // In square kilometers
+
+		for (var i = 0; i < indices.length; i += 3)
+		{
+			var vector1 = hierarchy.positions[indices[i]];
+			var vector2 = hierarchy.positions[indices[i+1]];
+			var vector3 = hierarchy.positions[indices[i+2]];
+
+			// These vectors define the sides of a parallelogram (double the size of the triangle)
+			var vectorC = Cesium.Cartesian3.subtract(vector2, vector1, new Cesium.Cartesian3());
+			var vectorD = Cesium.Cartesian3.subtract(vector3, vector1, new Cesium.Cartesian3());
+
+			// Area of parallelogram is the cross product of the vectors defining its sides
+			var areaVector = Cesium.Cartesian3.cross(vectorC, vectorD, new Cesium.Cartesian3());
+
+			// Area of the triangle is just half the area of the parallelogram, add it to the sum.
+			area += Cesium.Cartesian3.magnitude(areaVector)/2.0;
+		}
+		console.log("area of polygon : "+area); 
+		area=(area).toFixed(2);
+		 //Make sure it's a polygon and doesn't already have a position.
+	
+		var center = Cesium.BoundingSphere.fromPoints(hierarchy.positions).center;
+		Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
+
+		bluePolygon.position = new Cesium.ConstantPositionProperty(center);
+	
+
+		//Set up the label.
+		var label = new Cesium.LabelGraphics();
+		var temp=((area/1000)/1000).toFixed(2);
+		var label_text=null;
+		if(temp>100)
+			label_text=temp+" Sq Km";
+		else
+			label_text=area+" Sq m";
+		
+		label.text = new Cesium.ConstantProperty(label_text);
+		label.font = new Cesium.ConstantProperty('40px sans-serif');
+		label.fillColor = new Cesium.ConstantProperty(Cesium.Color.WHITE);
+		label.outlineColor = new Cesium.ConstantProperty(Cesium.Color.BLACK);
+		label.outlineWidth = new Cesium.ConstantProperty(1);
+		label.style = new Cesium.ConstantProperty(Cesium.LabelStyle.FILL_AND_OUTLINE);
+		label.scale=new Cesium.ConstantProperty(0.5);
+		bluePolygon.label = label;
+	
+		//reset values
+		this.polygon_positions=[];
+		
+		return label_text;
+		
+	}
+	_.prototype.get_count=function()
+	{
+		return this.polygon_positions.length;
+	}
+	_.prototype.clear=function()
+	{
+		
+		
+		this.viewer.entities.remove(this.polygon);
+		this.polygon_positions=[];
+		this.billboards.removeAll();
+	}
+	_.prototype.destroy=function()
+	{
+		viewer.scene.globe.depthTestAgainstTerrain = true;
+		this.viewer.entities.remove(this.label_position);
+		this.viewer.entities.remove(this.polygon);
+		this.handler = this.handler && this.handler.destroy();
+		this.polygon_positions=[];
+		this.billboards.removeAll();
+	}
+
+	
+	
+	
+	
+	
+	
+	return _;
+})();

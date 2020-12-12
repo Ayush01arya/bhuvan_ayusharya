@@ -1,0 +1,171 @@
+var EventHandler = (function() {
+
+	
+	function _(viewer)
+	{
+		this._viewer=viewer;
+		this.left_click=[];
+		this.left_up=[];
+		this.left_down=[];
+		this.left_double_click=[];
+		this.right_click=[];
+		this.mouse_move=[];
+		
+		var handler=new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+		handler.setInputAction(
+			function (click) {
+
+				var i=0;
+				for(;i<this.left_click.length;i++)
+				{
+					
+						this.left_click[i](click);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+		
+		handler.setInputAction(
+			function (click) {
+
+				var i=0;
+				for(;i<this.left_double_click.length;i++)
+				{
+					
+						this.left_double_click[i](click);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+		
+		handler.setInputAction(
+			function (click) {
+
+				var i=0;
+				for(;i<this.left_up.length;i++)
+				{
+					
+						this.left_up[i](click);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.LEFT_UP);
+		
+		handler.setInputAction(
+			function (click) {
+
+				var i=0;
+				for(;i<this.left_down.length;i++)
+				{
+					
+						this.left_down[i](click);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.LEFT_DOWN);
+		
+		handler.setInputAction(
+			function (click) {
+
+				var i=0;
+				for(;i<this.right_click.length;i++)
+				{
+					
+						this.right_click[i](click);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+		
+		handler.setInputAction(
+			function (movement) {
+
+				var i=0;
+				for(;i<this.mouse_move.length;i++)
+				{
+					
+						this.mouse_move[i](movement);
+					
+				}
+				
+		}.bind(this), Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+	}
+	
+	 _.prototype.registerEvent=function(type,callback)
+	{
+		switch(type)
+		{
+			case Cesium.ScreenSpaceEventType.LEFT_CLICK:
+				this.left_click.push(callback);
+				break;
+			case Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK:
+				this.left_double_click.push(callback);
+				break;	
+			case Cesium.ScreenSpaceEventType.LEFT_UP:
+				this.left_up.push(callback);
+				break;	
+			case Cesium.ScreenSpaceEventType.LEFT_DOWN:
+				this.left_down.push(callback);
+				break;	
+			case Cesium.ScreenSpaceEventType.RIGHT_CLICK:
+				this.right_click.push(callback);
+				break;
+
+			case Cesium.ScreenSpaceEventType.MOUSE_MOVE:
+				this.mouse_move.push(callback);
+				break;
+							
+		}
+	}
+	_.prototype.unregisterEvent=function(type,callback)
+		{
+			switch(type)
+			{
+				case Cesium.ScreenSpaceEventType.LEFT_CLICK:
+					
+					var index = this.left_click.indexOf(callback);
+					if(index != -1)
+						this.left_click.splice(index, 1);
+					
+					break;
+				case Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK:
+					
+					var index = this.left_double_click.indexOf(callback);
+					if(index != -1)
+						this.left_double_click.splice(index, 1);
+					
+					break;
+				case Cesium.ScreenSpaceEventType.LEFT_UP:
+					
+					var index = this.left_up.indexOf(callback);
+					if(index != -1)
+						this.left_up.splice(index, 1);
+					
+					break;
+				case Cesium.ScreenSpaceEventType.LEFT_DOWN:
+					
+					var index = this.left_down.indexOf(callback);
+					if(index != -1)
+						this.left_down.splice(index, 1);
+					
+					break;
+					
+				case Cesium.ScreenSpaceEventType.RIGHT_CLICK:
+					
+					var index = this.right_click.indexOf(callback);
+					if(index != -1)
+						this.right_click.splice(index, 1);
+					
+					break;
+
+				case Cesium.ScreenSpaceEventType.MOUSE_MOVE:
+					
+					var index = this.mouse_move.indexOf(callback);
+					if(index != -1)
+						this.mouse_move.splice(index, 1);
+					
+					break;					
+			}
+		}
+	return _;
+})();

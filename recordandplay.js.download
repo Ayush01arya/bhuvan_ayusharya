@@ -1,0 +1,97 @@
+var RecordPlayDownload = (function() {
+	
+
+	
+
+	
+	function _(viewer,videocontainer)
+	{
+		this._viewer=viewer;
+		this._canvas=viewer.canvas;
+		this.stream = viewer.canvas.captureStream();
+		this.recordedBlobs = null;
+		this.video=videocontainer;
+		this.mediaSource=new MediaSource();
+		this.mediaSource.addEventListener('sourceopen', this.handleSourceOpen, false);
+		
+		
+		
+		
+	}
+
+	
+	 _.prototype.start=function()
+	{
+		var options = {mimeType: 'video/webm'};
+		var _self=this;
+		_self.recordedBlobs=[];
+		
+		try {
+			_self.mediaRecorder = new MediaRecorder(_self.stream, options);
+		} catch (e0) {
+						console.log('Unable to create MediaRecorder with options Object: ', e0);
+						try {
+							options = {mimeType: 'video/webm,codecs=vp9'};
+							_self.mediaRecorder = new MediaRecorder(_self.stream, options);
+						} catch (e1) {
+								console.log('Unable to create MediaRecorder with options Object: ', e1);
+								try {
+									options = 'video/vp8'; // Chrome 47
+									_self.mediaRecorder = new MediaRecorder(_self.stream, options);
+								} catch (e2) {
+									alert('MediaRecorder is not supported by this browser.\n\n' +
+									'Try Firefox 29 or later, or Chrome 47 or later, with Enable experimental Web Platform features enabled from chrome://flags.');
+									console.error('Exception while creating MediaRecorder:', e2);
+									return;
+								}
+						}
+		}
+		console.log('Created MediaRecorder', _self.mediaRecorder, 'with options', options);
+		
+		_self.mediaRecorder.onstop = function(event) {
+									  console.log('Recorder stopped: ', event);
+									};
+		_self.mediaRecorder.ondataavailable =function(event) {
+											  if (event.data && event.data.size > 0) {
+												_self.recordedBlobs.push(event.data);
+											  }
+											};
+		_self.mediaRecorder.start(100); // collect 100ms of data
+		console.log('MediaRecorder started', _self.mediaRecorder);
+	}
+	_.prototype.stop=function()
+	{
+		this.mediaRecorder.stop();
+		console.log('Recorded Blobs: ', this.recordedBlobs);
+	}
+	_.prototype.play=function()
+	{
+		var superBuffer = new Blob(this.recordedBlobs, {type: 'video/webm'});
+		this.video.src = window.URL.createObjectURL(superBuffer);
+	}	
+	_.prototype.download=function()
+	{
+		var blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
+		var url = window.URL.createObjectURL(blob);
+		var a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = url;
+		a.download = 'bhuvan3d.webm';
+		document.body.appendChild(a);
+		
+		
+		a.click();
+		document.body.removeChild(a);
+	
+	}
+	_.prototype.destroy=function()
+	{
+		this.mediaSource.removeEventListener('sourceopen', this.handleSourceOpen, false);
+		
+		this.recordedBlobs = null;
+		delete this;
+		
+	}
+	
+	return _;
+})();
